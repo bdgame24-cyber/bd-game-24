@@ -8,8 +8,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(__dirname));
 // Database Memory State
 let users = [
     { id: 101, name: "Admin", phone: "01700000000", balance: 100000, role: "admin" },
