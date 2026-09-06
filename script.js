@@ -5,7 +5,6 @@ let myBets = [];
 let gameHistory = [];
 let isLocked = false;
 
-// Load data on startup
 window.onload = function() {
   const savedUser = localStorage.getItem('bdgame24_user');
   if(savedUser) {
@@ -13,7 +12,6 @@ window.onload = function() {
     loginUser(false);
   }
 
-  // Load history from localStorage to prevent loss on refresh
   const savedHistory = localStorage.getItem('bdgame24_history');
   if(savedHistory) {
     gameHistory = JSON.parse(savedHistory);
@@ -45,6 +43,11 @@ function showToast(msg, type = "success") {
   setTimeout(() => toast.remove(), 3000);
 }
 
+// "কাজ চলছে" নোটিফিকেশন ফাংশন
+function showWorkInProgress() {
+  showToast("কাজ চলছে! শীঘ্রই আসছে...", "error");
+}
+
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
   const targetPage = document.getElementById(pageId);
@@ -64,7 +67,14 @@ if(regForm) {
   regForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const phone = document.getElementById('regPhone').value;
-    currentUser = { phone, uid: Math.floor(100000 + Math.random() * 900000), balance: 0.00 };
+    const inviteCode = document.getElementById('regInvite') ? document.getElementById('regInvite').value : "";
+    
+    currentUser = { 
+      phone, 
+      uid: Math.floor(100000 + Math.random() * 900000), 
+      balance: 0.00,
+      referredBy: inviteCode || "None"
+    };
     saveAndLogin();
   });
 }
@@ -99,6 +109,38 @@ function logout() {
   if(document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
   showPage('loginPage');
 }
+
+// Referral Modal Functions
+function openReferModal() {
+  if(!currentUser) { showToast("আগে লগইন করুন!", "error"); return; }
+  const referUrl = window.location.origin + "?invite=" + currentUser.uid;
+  const referLinkEl = document.getElementById('referLinkText');
+  if(referLinkEl) referLinkEl.innerText = referUrl;
+  document.getElementById('referModal').style.display = "flex";
+}
+
+function closeReferModal() {
+  document.getElementById('referModal').style.display = "none";
+}
+
+function copyReferLink() {
+  const referUrl = window.location.origin + "?invite=" + (currentUser ? currentUser.uid : "");
+  navigator.clipboard.writeText(referUrl).then(() => {
+    showToast("রেফার লিংক সফলভাবে কপি হয়েছে!");
+    closeReferModal();
+  }).catch(() => {
+    showToast("কপি করতে সমস্যা হয়েছে!", "error");
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const inviteParam = urlParams.get('invite');
+  if(inviteParam) {
+    const inviteInput = document.getElementById('regInvite');
+    if(inviteInput) inviteInput.value = inviteParam;
+  }
+});
 
 // Betting System
 function openBetModal(type) {
@@ -186,7 +228,6 @@ let seconds = 30;
 setInterval(() => {
   seconds--;
 
-  // Last 5 seconds lock check (i.e., when seconds <= 5)
   if(seconds <= 5) {
     isLocked = true;
   } else {
@@ -203,7 +244,7 @@ setInterval(() => {
   if(timerEl) {
     timerEl.innerText = "00:" + secText;
     if(isLocked) {
-      timerEl.style.color = "#f59e0b"; // Warning color when locked
+      timerEl.style.color = "#f59e0b";
     } else {
       timerEl.style.color = "#ef4444";
     }
@@ -224,11 +265,10 @@ function generateGameResult() {
   };
 
   gameHistory.unshift(newResult);
-  if(gameHistory.length > 20) gameHistory.pop(); // Keep last 20 history items
+  if(gameHistory.length > 20) gameHistory.pop();
   localStorage.setItem('bdgame24_history', JSON.stringify(gameHistory));
   updateGameHistoryTable();
 
-  // Evaluate user bets
   myBets.forEach(bet => {
     if(bet.period === currentPeriod && bet.status === 'Pending') {
       if(bet.selection === isBig || bet.selection === color || bet.selection === bet.number || bet.selection === randomNum.toString()) {
