@@ -1,87 +1,188 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: #0f172a;
-    color: #f8fafc;
-    padding: 15px;
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 10px;
 }
 
 .container {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-.card {
-    background-color: #1e293b;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-    border: 1px solid #334155;
+/* Wallet Card */
+.wallet-card {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 15px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.header-title {
-    text-align: center;
-    color: #38bdf8;
-    font-size: 24px;
-    margin-bottom: 5px;
+.wallet-balance p {
+  font-size: 13px;
+  opacity: 0.9;
 }
 
-.sub-title {
-    text-align: center;
-    color: #94a3b8;
-    font-size: 14px;
-    margin-bottom: 15px;
+.wallet-balance h2 {
+  font-size: 22px;
+  margin-top: 4px;
 }
 
-.timer-box {
-    text-align: center;
-    background: #020617;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #38bdf8;
-    margin-bottom: 15px;
-}
-
-.timer-text {
-    font-size: 32px;
-    font-weight: bold;
-    color: #f43f5e;
-}
-
-.btn-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+.wallet-btns {
+  display: flex;
+  gap: 8px;
 }
 
 .btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    color: white;
-    font-size: 16px;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.btn-red { background-color: #ef4444; }
-.btn-green { background-color: #10b981; }
-.btn-violet { background-color: #8b5cf6; }
-.btn-blue { background-color: #3b82f6; }
+.btn-withdraw { background: #f59e0b; color: white; }
+.btn-deposit { background: #10b981; color: white; }
 
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    margin-bottom: 12px;
-    border-radius: 6px;
-    border: 1px solid #475569;
-    background-color: #0f172a;
-    color: white;
+/* Notice Bar */
+.notice-bar {
+  background: #1e293b;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 12px;
 }
+
+/* Time Tabs */
+.time-tabs {
+  display: flex;
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 12px;
+  color: #94a3b8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  font-weight: bold;
+}
+
+/* Timer Card */
+.timer-card {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.game-title {
+  font-weight: bold;
+  color: #f8fafc;
+}
+
+.period-text {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.timer-clock p {
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: right;
+}
+
+.clock-display {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ef4444;
+  margin-top: 2px;
+}
+
+/* Action Buttons */
+.action-btns {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.btn-color {
+  flex: 1;
+  border: none;
+  padding: 12px 0;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn-green { background: #10b981; }
+.btn-violet { background: #8b5cf6; }
+.btn-red { background: #ef4444; }
+
+/* Number Grid */
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.num-btn {
+  border: none;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.num-btn.green { background: #10b981; }
+.num-btn.red { background: #ef4444; }
+.num-btn.red-violet { background: linear-gradient(135deg, #ef4444 50%, #8b5cf6 50%); }
+
+/* Big / Small */
+.size-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-size {
+  flex: 1;
+  border: none;
+  padding: 12px 0;
+  border-radius: 25px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-big { background: #f59e0b; }
+.btn-small { background: #3b82f6; }
