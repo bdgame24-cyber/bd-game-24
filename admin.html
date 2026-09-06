@@ -1,97 +1,54 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BD GAME 24 - Admin Panel</title>
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <title>HGNICE - Admin Panel</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+    h2 { border-bottom: 2px solid #ff4d4f; padding-bottom: 10px; margin-bottom: 20px; color: #ff4d4f; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    th { background: #ff4d4f; color: white; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Admin Login Form -->
-        <div class="card" id="loginCard">
-            <h2 class="header-title" style="color: #ef4444;">Admin Login</h2>
-            <br>
-            <label>Username:</label>
-            <input type="text" id="adminUser" placeholder="Enter Username">
-            <br><br>
-            <label>Password:</label>
-            <input type="password" id="adminPass" placeholder="Enter Password">
-            <br><br>
-            <button class="btn btn-red" style="width: 100%;" onclick="loginAdmin()">Login</button>
-        </div>
+  <div class="container">
+    <h2>Admin Management Dashboard</h2>
+    <h3>User E-Wallet Payment Methods</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Type</th>
+          <th>Account Name</th>
+          <th>Phone / Account Number</th>
+        </tr>
+      </thead>
+      <tbody id="walletTable">
+        <!-- Dynamic Data Loads Here -->
+      </tbody>
+    </table>
+  </div>
 
-        <!-- Admin Control Panel (Login Completed) -->
-        <div id="adminPanel" style="display: none;">
-            <div class="card" style="border-color: #ef4444;">
-                <h1 class="header-title" style="color: #ef4444;">ADMIN CONTROL PANEL</h1>
-                <p class="sub-title">BD GAME 24 Management Engine</p>
-            </div>
-
-            <div class="card">
-                <h3>Payment Gateway Control</h3>
-                <label>bKash Number:</label>
-                <input type="text" id="adminBkash" value="01700000000">
-                <button class="btn btn-blue" onclick="updateNumber('bkash', 'adminBkash')">Save bKash</button>
-
-                <br><br>
-                <label>Nagad Number:</label>
-                <input type="text" id="adminNagad" value="01800000000">
-                <button class="btn btn-blue" onclick="updateNumber('nagad', 'adminNagad')">Save Nagad</button>
-            </div>
-
-            <div class="card">
-                <h3>Manual Result Control (Force Winner)</h3>
-                <div class="btn-group">
-                    <button class="btn btn-red" onclick="forceWinner('RED')">Force RED</button>
-                    <button class="btn btn-green" onclick="forceWinner('GREEN')">Force GREEN</button>
-                    <button class="btn btn-violet" onclick="forceWinner('VIOLET')">Force VIOLET</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function loginAdmin() {
-            const username = document.getElementById('adminUser').value;
-            const password = document.getElementById('adminPass').value;
-
-            fetch('/api/admin/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username, password })
-            })
-            .then(r => r.json())
-            .then(res => {
-                if(res.error) {
-                    alert(res.error);
-                } else {
-                    document.getElementById('loginCard').style.display = 'none';
-                    document.getElementById('adminPanel').style.display = 'block';
-                }
-            });
-        }
-
-        function updateNumber(gateway, inputId) {
-            const newNumber = document.getElementById(inputId).value;
-            fetch('/api/admin/update-gateway', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ gateway, newNumber })
-            }).then(r => r.json()).then(res => {
-                alert(res.message || res.error);
-            });
-        }
-
-        function forceWinner(color) {
-            fetch('/api/admin/set-result', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ color })
-            }).then(r => r.json()).then(res => {
-                alert(res.message);
-            });
-        }
-    </script>
+  <script>
+    async function fetchWallets() {
+      const res = await fetch('/api/admin/wallets');
+      const wallets = await res.json();
+      const tableBody = document.getElementById('walletTable');
+      tableBody.innerHTML = '';
+      wallets.forEach(item => {
+        tableBody.innerHTML += `
+          <tr>
+            <td>${item.userId}</td>
+            <td>${item.type}</td>
+            <td>${item.name}</td>
+            <td>${item.account}</td>
+          </tr>
+        `;
+      });
+    }
+    fetchWallets();
+  </script>
 </body>
-    </html>
+</html>
