@@ -1,102 +1,90 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BD GAME 24 - Color Prediction</title>
-    <link rel="stylesheet" href="/style.css">
-    <script src="/socket.io/socket.io.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BD GAME 24 - Win Go</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1 class="header-title">BD GAME 24</h1>
-            <p class="sub-title">Live Color Betting Platform</p>
-            <h3>User Balance: <span id="balanceDisplay" style="color:#10b981;">1000</span> BDT</h3>
-        </div>
-
-        <div class="card timer-box">
-            <h4>Period ID: <span id="periodId">BD20260907001</span></h4>
-            <div class="timer-text" id="timerDisplay">00:60</div>
-            <p id="statusDisplay" style="color:#38bdf8;">Status: OPEN</p>
-        </div>
-
-        <div class="card">
-            <h3>Place Your Bet</h3>
-            <label>Amount (BDT):</label>
-            <input type="number" id="betAmount" value="100" min="10">
-
-            <div class="btn-group">
-                <button class="btn btn-red" onclick="placeBet('RED')">Bet Red (2x)</button>
-                <button class="btn btn-green" onclick="placeBet('GREEN')">Bet Green (2x)</button>
-                <button class="btn btn-violet" onclick="placeBet('VIOLET')">Bet Violet (4.5x)</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>Deposit Money</h3>
-            <p style="font-size: 13px; color: #94a3b8; margin-bottom: 10px;">
-                bKash: <b id="bkashNum">Loading...</b> | Nagad: <b id="nagadNum">Loading...</b>
-            </p>
-            <select id="gatewaySelect">
-                <option value="bkash">bKash</option>
-                <option value="nagad">Nagad</option>
-                <option value="rocket">Rocket</option>
-            </select>
-            <input type="text" id="trxId" placeholder="Enter Transaction ID (TrxID)">
-            <input type="number" id="depAmount" placeholder="Enter Amount BDT">
-            <button class="btn btn-blue" style="width:100%;" onclick="submitDeposit()">Submit Deposit</button>
-        </div>
+  <div class="container">
+    
+    <div class="card wallet-card">
+      <div class="wallet-balance">
+        <p>Wallet Balance</p>
+        <h2>৳ <span id="balance">1000.00</span></h2>
+      </div>
+      <div class="wallet-btns">
+        <button class="btn btn-withdraw">Withdraw</button>
+        <button class="btn btn-deposit">Deposit</button>
+      </div>
     </div>
 
-    <script>
-        const socket = io();
-        let currentUserId = 102; // Sample User ID
+    <div class="notice-bar">
+      <span>📢 Attention! Customer service only uses LIVE CHAT...</span>
+    </div>
 
-        // Load Gateways
-        fetch('/api/payment-numbers').then(r => r.json()).then(data => {
-            document.getElementById('bkashNum').innerText = data.bkash;
-            document.getElementById('nagadNum').innerText = data.nagad;
-        });
+    <div class="time-tabs">
+      <div class="tab active">Win Go<br><small>1Min</small></div>
+      <div class="tab">Win Go<br><small>3Min</small></div>
+      <div class="tab">Win Go<br><small>5Min</small></div>
+      <div class="tab">Win Go<br><small>10Min</small></div>
+    </div>
 
-        socket.on('timer_tick', (data) => {
-            document.getElementById('timerDisplay').innerText = `00:${data.timer < 10 ? '0' : ''}${data.timer}`;
-            document.getElementById('periodId').innerText = data.periodId;
-            document.getElementById('statusDisplay').innerText = `Status: ${data.status}`;
-        });
+    <div class="card timer-card">
+      <div class="timer-info">
+        <p class="game-title">Win Go 1Min</p>
+        <p class="period-text">Period: <span id="periodId">20260907001</span></p>
+      </div>
+      <div class="timer-clock">
+        <p>Time remaining</p>
+        <div class="clock-display" id="timer">00:45</div>
+      </div>
+    </div>
 
-        socket.on('round_result', (data) => {
-            alert(`Round Ended! Winning Color: ${data.winningColor}`);
-        });
+    <div class="action-btns">
+      <button class="btn-color btn-green" onclick="selectBet('GREEN')">Green</button>
+      <button class="btn-color btn-violet" onclick="selectBet('VIOLET')">Violet</button>
+      <button class="btn-color btn-red" onclick="selectBet('RED')">Red</button>
+    </div>
 
-        function placeBet(color) {
-            const amount = document.getElementById('betAmount').value;
-            fetch('/api/bet', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ userId: currentUserId, color, amount: parseFloat(amount) })
-            }).then(r => r.json()).then(res => {
-                if(res.error) alert(res.error);
-                else {
-                    alert("বেট সফল হয়েছে!");
-                    document.getElementById('balanceDisplay').innerText = res.balance;
-                }
-            });
-        }
+    <div class="number-grid">
+      <button class="num-btn red-violet" onclick="selectNum(0)">0</button>
+      <button class="num-btn green" onclick="selectNum(1)">1</button>
+      <button class="num-btn red" onclick="selectNum(2)">2</button>
+      <button class="num-btn green" onclick="selectNum(3)">3</button>
+      <button class="num-btn red" onclick="selectNum(4)">4</button>
+      <button class="num-btn red-violet" onclick="selectNum(5)">5</button>
+      <button class="num-btn red" onclick="selectNum(6)">6</button>
+      <button class="num-btn green" onclick="selectNum(7)">7</button>
+      <button class="num-btn red" onclick="selectNum(8)">8</button>
+      <button class="num-btn green" onclick="selectNum(9)">9</button>
+    </div>
 
-        function submitDeposit() {
-            const gateway = document.getElementById('gatewaySelect').value;
-            const trxId = document.getElementById('trxId').value;
-            const amount = document.getElementById('depAmount').value;
+    <div class="size-btns">
+      <button class="btn-size btn-big" onclick="selectBet('BIG')">Big</button>
+      <button class="btn-size btn-small" onclick="selectBet('SMALL')">Small</button>
+    </div>
 
-            fetch('/api/deposit', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ userId: currentUserId, gateway, trxId, amount })
-            }).then(r => r.json()).then(res => {
-                alert(res.message);
-            });
-        }
-    </script>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function selectBet(type) {
+      alert("Selected Bet: " + type);
+    }
+
+    function selectNum(num) {
+      alert("Selected Number: " + num);
+    }
+
+    socket.on('timer_tick', (data) => {
+      document.getElementById('periodId').innerText = data.periodId;
+      let sec = data.timer < 10 ? '0' + data.timer : data.timer;
+      document.getElementById('timer').innerText = "00:" + sec;
+    });
+  </script>
 </body>
 </html>
