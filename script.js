@@ -2,14 +2,37 @@ let currentUser = null;
 let selectedType = "";
 let currentPeriod = 20260907001;
 let myBets = [];
+let gameHistory = [];
 let isLocked = false;
 
+// Load data on startup
 window.onload = function() {
   const savedUser = localStorage.getItem('bdgame24_user');
   if(savedUser) {
     currentUser = JSON.parse(savedUser);
     loginUser(false);
   }
+
+  // Load history from localStorage to prevent loss on refresh
+  const savedHistory = localStorage.getItem('bdgame24_history');
+  if(savedHistory) {
+    gameHistory = JSON.parse(savedHistory);
+  }
+
+  const savedBets = localStorage.getItem('bdgame24_mybets');
+  if(savedBets) {
+    myBets = JSON.parse(savedBets);
+  }
+
+  const savedPeriod = localStorage.getItem('bdgame24_period');
+  if(savedPeriod) {
+    currentPeriod = parseInt(savedPeriod);
+  }
+
+  updateGameHistoryTable();
+  updateMyBetsTable();
+  const periodEl = document.getElementById('periodId');
+  if(periodEl) periodEl.innerText = currentPeriod;
 };
 
 function showToast(msg, type = "success") {
@@ -80,7 +103,7 @@ function logout() {
 // Betting System
 function openBetModal(type) {
   if(isLocked) {
-    showToast("সময় শেষ! অপেক্ষা করুন।", "error");
+    showToast("সময় শেষ! বেটিং লক করা হয়েছে।", "error");
     return;
   }
   if(!currentUser) { showToast("আগে লগইন করুন!", "error"); return; }
@@ -98,7 +121,11 @@ function setBetAmount(amt) {
 }
 
 function confirmBet() {
-  if(isLocked) { showToast("লক হয়ে গেছে!", "error"); closeBetModal(); return; }
+  if(isLocked) { 
+    showToast("রাউন্ড লক হয়ে গেছে, বেট নেওয়া যাবে না!", "error"); 
+    closeBetModal(); 
+    return; 
+  }
   const amount = parseFloat(document.getElementById('customAmount').value);
   if(currentUser.balance < amount) {
     showToast("পর্যাপ্ত ব্যালেন্স নেই!", "error");
@@ -110,7 +137,8 @@ function confirmBet() {
   currentUser.balance -= amount;
   saveUser();
   
-  myBets.push({ period: currentPeriod, selection: selectedType, amount: amount, status: 'Pending' });
+  myBets.unshift({ period: currentPeriod, selection: selectedType, amount: amount, status: 'Pending' });
+  localStorage.setItem('bdgame24_mybets', JSON.stringify(myBets));
   updateMyBetsTable();
   showToast(`৳${amount} বেট কনফার্ম হয়েছে`);
   closeBetModal();
@@ -123,7 +151,7 @@ function submitDeposit() {
   
   currentUser.balance += parseFloat(amt);
   saveUser();
-  showToast("ডিপোজিট জমা হয়েছে!");
+  showToast("ডিপোজিট সফল হয়েছে!");
   showPage('profilePage');
 }
 
@@ -135,7 +163,7 @@ function submitWithdraw() {
   
   currentUser.balance -= amt;
   saveUser();
-  showToast("উইথড্র সফল হয়েছে!");
+  showToast("উইথড্র আবেদন সফল হয়েছে!");
   showPage('profilePage');
 }
 
@@ -153,20 +181,33 @@ function updateUI() {
   }
 }
 
-// Timer Logic
-let seconds = 45;
+// 30 Seconds Timer Logic (Last 5 Seconds Locked)
+let seconds = 30;
 setInterval(() => {
   seconds--;
-  if(seconds <= 5) isLocked = true;
-  else isLocked = false;
+
+  // Last 5 seconds lock check (i.e., when seconds <= 5)
+  if(seconds <= 5) {
+    isLocked = true;
+  } else {
+    isLocked = false;
+  }
 
   if(seconds < 0) {
-    seconds = 60;
+    seconds = 30;
     generateGameResult();
   }
+
   let secText = seconds < 10 ? '0' + seconds : seconds;
   const timerEl = document.getElementById('timer');
-  if(timerEl) timerEl.innerText = "00:" + secText;
+  if(timerEl) {
+    timerEl.innerText = "00:" + secText;
+    if(isLocked) {
+      timerEl.style.color = "#f59e0b"; // Warning color when locked
+    } else {
+      timerEl.style.color = "#ef4444";
+    }
+  }
 }, 1000);
 
 function generateGameResult() {
@@ -175,34 +216,52 @@ function generateGameResult() {
   let color = randomNum % 2 === 0 ? "RED" : "GREEN";
   if(randomNum === 0 || randomNum === 5) color = "VIOLET";
   
-  const historyBody = document.getElementById('gameHistoryBody');
-  if(historyBody) {
-    const row = `<tr>
-      <td>${currentPeriod}</td>
-      <td>${randomNum}</td>
-      <td>${isBig}</td>
-      <td><span class="dot ${color.toLowerCase()}-dot"></span></td>
-    </tr>`;
-    historyBody.innerHTML = row + historyBody.innerHTML;
-  }
+  const newResult = {
+    period: currentPeriod,
+    number: randomNum,
+    size: isBig,
+    color: color
+  };
 
+  gameHistory.unshift(newResult);
+  if(gameHistory.length > 20) gameHistory.pop(); // Keep last 20 history items
+  localStorage.setItem('bdgame24_history', JSON.stringify(gameHistory));
+  updateGameHistoryTable();
+
+  // Evaluate user bets
   myBets.forEach(bet => {
     if(bet.period === currentPeriod && bet.status === 'Pending') {
-      if(bet.selection === isBig || bet.selection === color || bet.selection === randomNum.toString()) {
+      if(bet.selection === isBig || bet.selection === color || bet.selection === bet.number || bet.selection === randomNum.toString()) {
         bet.status = 'WON';
         currentUser.balance += bet.amount * 1.9;
-        showToast(`🎉 BD GAME 24: বিজয়ী হয়েছেন!`);
+        showToast(`🎉 অভিনন্দন! Period ${currentPeriod}-এ জিতেছেন!`);
       } else {
         bet.status = 'LOST';
       }
     }
   });
 
+  localStorage.setItem('bdgame24_mybets', JSON.stringify(myBets));
   saveUser();
   updateMyBetsTable();
+
   currentPeriod++;
+  localStorage.setItem('bdgame24_period', currentPeriod);
   const periodEl = document.getElementById('periodId');
   if(periodEl) periodEl.innerText = currentPeriod;
+}
+
+function updateGameHistoryTable() {
+  const historyBody = document.getElementById('gameHistoryBody');
+  if(!historyBody) return;
+  historyBody.innerHTML = gameHistory.map(h => `
+    <tr>
+      <td>${h.period}</td>
+      <td>${h.number}</td>
+      <td>${h.size}</td>
+      <td><span class="dot ${h.color.toLowerCase()}-dot"></span></td>
+    </tr>
+  `).join('');
 }
 
 function updateMyBetsTable() {
