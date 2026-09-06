@@ -65,13 +65,51 @@ function switchRecordTab(tabId, element) {
   document.getElementById(tabId).classList.add('active');
 }
 
+// Universal Robust Copy Function (Works everywhere including local files)
+function copyTextToClipboard(text, successMsg) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(successMsg);
+    }).catch(() => {
+      fallbackCopyText(text, successMsg);
+    });
+  } else {
+    fallbackCopyText(text, successMsg);
+  }
+}
+
+function fallbackCopyText(text, successMsg) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      showToast(successMsg);
+    } else {
+      showToast("কপি করা যায়নি!", "error");
+    }
+  } catch (err) {
+    showToast("কপি করতে সমস্যা হয়েছে!", "error");
+  }
+  document.body.removeChild(textArea);
+}
+
 function copyMerchantNumber() {
   const num = document.getElementById('merchantNumberText').innerText;
-  navigator.clipboard.writeText(num).then(() => {
-    showToast("নম্বর সফলভাবে কপি হয়েছে!");
-  }).catch(() => {
-    showToast("কপি করা যায়নি!", "error");
-  });
+  copyTextToClipboard(num, "মার্চেন্ট নম্বর সফলভাবে কপি হয়েছে!");
+}
+
+function copyReferLink() {
+  const referUrl = document.getElementById('referLinkText').innerText;
+  if(!referUrl || referUrl === '-') {
+    showToast("লিংক পাওয়া যায়নি!", "error");
+    return;
+  }
+  copyTextToClipboard(referUrl, "রেফার লিংক সফলভাবে কপি হয়েছে!");
 }
 
 // Authentication
@@ -88,7 +126,8 @@ if(regForm) {
       balance: 0.00,
       referredBy: inviteCode || "None",
       referCount: 0,
-      referBonusAmt: 0.00
+      referBonusAmt: 0.00,
+      referList: []
     };
     saveAndLogin();
   });
@@ -99,7 +138,14 @@ if(loginForm) {
   loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const phone = document.getElementById('loginPhone').value;
-    currentUser = { phone, uid: Math.floor(100000 + Math.random() * 900000), balance: 0.00, referCount: 3, referBonusAmt: 250.00 };
+    currentUser = { 
+      phone, 
+      uid: Math.floor(100000 + Math.random() * 900000), 
+      balance: 0.00, 
+      referCount: 1, 
+      referBonusAmt: 50.00,
+      referList: [{ phone: "018********", date: "07/09/2026", bonus: 50 }]
+    };
     saveAndLogin();
   });
 }
@@ -140,19 +186,19 @@ function changePassword() {
 // Referral Dashboard Logic
 function updateReferralDashboard() {
   if(!currentUser) return;
-  const referUrl = window.location.origin + "?invite=" + currentUser.uid;
+  const referUrl = window.location.origin + window.location.pathname + "?invite=" + currentUser.uid;
   document.getElementById('referLinkText').innerText = referUrl;
   document.getElementById('totalRefers').innerText = (currentUser.referCount || 0) + " জন";
   document.getElementById('referBonus').innerText = (currentUser.referBonusAmt || 0).toFixed(2);
-}
 
-function copyReferLink() {
-  const referUrl = window.location.origin + "?invite=" + (currentUser ? currentUser.uid : "");
-  navigator.clipboard.writeText(referUrl).then(() => {
-    showToast("রেফার লিংক সফলভাবে কপি হয়েছে!");
-  }).catch(() => {
-    showToast("কপি করতে সমস্যা হয়েছে!", "error");
-  });
+  const referListBody = document.getElementById('referListBody');
+  if(currentUser.referList && currentUser.referList.length > 0) {
+    referListBody.innerHTML = currentUser.referList.map(r => `
+      <tr><td>${r.phone}</td><td>${r.date}</td><td style="color:#10b981;">৳${r.bonus}</td></tr>
+    `).join('');
+  } else {
+    referListBody.innerHTML = `<tr><td colspan="3" style="color:#94a3b8;">এখনো কেউ আপনার লিংকে রেজিস্টার করেনি</td></tr>`;
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
