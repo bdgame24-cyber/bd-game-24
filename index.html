@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BD GAME 24 - Color Prediction Platform</title>
+  <title>BD GAME 24 - Professional Platform</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -74,7 +74,9 @@
       </marquee>
     </div>
 
-    <div class="notice-bar">📢 ২৪/৭ অটো ডিপোজিট ও উইথড্র সুবিধা চালু রয়েছে।</div>
+    <div class="notice-bar" onclick="showPage('notificationPage')" style="cursor: pointer;">
+      📢 ২৪/৭ অটো ডিপোজিট ও উইথড্র সুবিধা চালু রয়েছে। (নোটিফিকেশন দেখুন)
+    </div>
     
     <div class="section-title">পপুলার গেমসমূহ</div>
     <div class="game-grid">
@@ -197,7 +199,7 @@
       <div class="profile-info">
         <h3>UID: <span id="profUid">-</span></h3>
         <p>নম্বর: <span id="profPhone">-</span></p>
-        <span class="vip-badge">VIP 1 Member</span>
+        <span class="vip-badge" id="profVipBadge">VIP 1 Member</span>
       </div>
     </div>
 
@@ -221,18 +223,150 @@
         <span class="menu-icon">🏧</span> 
         <div><h4>উইথড্র করুন</h4><p>সকল ক্যাশআউট রেকর্ড</p></div>
       </div>
-      <div class="menu-item" onclick="openReferModal()">
+      <div class="menu-item" onclick="showPage('referralPage')">
         <span class="menu-icon">👥</span> 
-        <div><h4>ইনভাইট ও রেফারেল</h4><p>বন্ধুদের ইনভাইট করে বোনাস পান</p></div>
+        <div><h4>ইনভাইট ও রেফারেল ড্যাশবোর্ড</h4><p>রেফার আয় ও সদস্য তালিকা</p></div>
       </div>
-      <div class="menu-item" onclick="showWorkInProgress()">
-        <span class="menu-icon">🎁</span> 
-        <div><h4>ডেইলি রিওয়ার্ড</h4><p>প্রতিদিনের ফ্রি বোনাস क्लेম</p></div>
+      <div class="menu-item" onclick="showPage('recordsPage')">
+        <span class="menu-icon">📊</span> 
+        <div><h4>ট্রানজাকশন হিস্ট্রি</h4><p>ডিপোজিট ও উইথড্র রেকর্ড</p></div>
+      </div>
+      <div class="menu-item" onclick="showPage('vipPage')">
+        <span class="menu-icon">👑</span> 
+        <div><h4>ভিআইপি লেভেল (VIP)</h4><p>আপনার ভিআইপি স্ট্যাটাস ও সুবিধা</p></div>
+      </div>
+      <div class="menu-item" onclick="showPage('supportPage')">
+        <span class="menu-icon">🎧</span> 
+        <div><h4>লাইভ কাস্টমার সাপোর্ট</h4><p>২৪ ঘণ্টা হেল্পলাইন ও টেলিগ্রাম</p></div>
+      </div>
+      <div class="menu-item" onclick="showPage('notificationPage')">
+        <span class="menu-icon">🔔</span> 
+        <div><h4>নোটিফিকেশন ও অ্যানাউন্সমেন্ট</h4><p>অফিসিয়াল আপডেট ও খবর</p></div>
+      </div>
+      <div class="menu-item" onclick="showPage('securityPage')">
+        <span class="menu-icon">🔒</span> 
+        <div><h4>সিকিউরিটি ও পাসওয়ার্ড</h4><p>একাউন্ট পাসওয়ার্ড পরিবর্তন</p></div>
       </div>
       <div class="menu-item" onclick="logout()">
         <span class="menu-icon">🚪</span> 
         <div><h4 style="color:#ef4444;">লগআউট করুন</h4><p>একাউন্ট থেকে বের হয়ে যান</p></div>
       </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL DASHBOARD PAGE -->
+  <div id="referralPage" class="page">
+    <div class="auth-card">
+      <h2>ইনভাইট ও রেফারেল ড্যাশবোর্ড</h2>
+      <div style="background: #0f172a; padding: 15px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 15px; text-align: center;">
+        <p style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">আপনার রেফারেল লিংক</p>
+        <span id="referLinkText" style="font-size: 11px; color: #38bdf8; word-break: break-all; display:block; margin-bottom:10px;">-</span>
+        <button class="btn-submit" style="margin-top:0; padding: 8px;" onclick="copyReferLink()">লিংক কপি করুন</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+        <div style="background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; text-align: center;">
+          <p style="font-size: 11px; color: #94a3b8;">মোট রেফার</p>
+          <h3 id="totalRefers" style="color: #f59e0b; font-size: 18px; margin-top: 4px;">0 জন</h3>
+        </div>
+        <div style="background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; text-align: center;">
+          <p style="font-size: 11px; color: #94a3b8;">রেফার কমিশন</p>
+          <h3 style="color: #10b981; font-size: 18px; margin-top: 4px;">৳ <span id="referBonus">0.00</span></h3>
+        </div>
+      </div>
+      <button class="btn-submit" style="background: #334155;" onclick="showPage('profilePage')">প্রোফাইলে ফিরে যান</button>
+    </div>
+  </div>
+
+  <!-- RECORDS PAGE -->
+  <div id="recordsPage" class="page">
+    <div class="auth-card">
+      <h2>ট্রানজাকশন রেকর্ড</h2>
+      <div class="tab-container" style="margin-bottom: 12px;">
+        <button class="tab-btn active" onclick="switchRecordTab('depRecTab', this)">ডিপোজিট</button>
+        <button class="tab-btn" onclick="switchRecordTab('wdRecTab', this)">উইথড্র</button>
+      </div>
+      <div id="depRecTab" class="tab-content active">
+        <table class="data-table">
+          <thead><tr><th>মেথড</th><th>পরিমাণ</th><th>TrxID</th><th>স্ট্যাটাস</th></tr></thead>
+          <tbody id="depHistoryBody"></tbody>
+        </table>
+      </div>
+      <div id="wdRecTab" class="tab-content">
+        <table class="data-table">
+          <thead><tr><th>মেথড</th><th>নম্বর</th><th>পরিমাণ</th><th>স্ট্যাটাস</th></tr></thead>
+          <tbody id="wdHistoryBody"></tbody>
+        </table>
+      </div>
+      <button class="btn-submit" style="background: #334155; margin-top: 15px;" onclick="showPage('profilePage')">ফিরে যান</button>
+    </div>
+  </div>
+
+  <!-- VIP PAGE -->
+  <div id="vipPage" class="page">
+    <div class="auth-card">
+      <h2>ভিআইপি লেভেল বেনিফিট</h2>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">বেটিং এবং ডিপোজিটের মাধ্যমে আপনার ভিআইপি লেভেল আপডেট করুন।</p>
+      <div style="background: #0f172a; padding: 15px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 12px;">
+        <h4 style="color: #f59e0b; font-size: 14px;">VIP 1 (বর্তমান লেভেল)</h4>
+        <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">ডেইলি উইথড্র লিমিট: ৳১০,০০০ পর্যন্ত</p>
+      </div>
+      <div style="background: #0f172a; padding: 15px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 15px; opacity: 0.6;">
+        <h4 style="color: #38bdf8; font-size: 14px;">VIP 2 (আসছে...)</h4>
+        <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">ডেইলি উইথড্র লিমিট: ৳৫০,০০০ পর্যন্ত</p>
+      </div>
+      <button class="btn-submit" style="background: #334155;" onclick="showPage('profilePage')">ফিরে যান</button>
+    </div>
+  </div>
+
+  <!-- SUPPORT PAGE -->
+  <div id="supportPage" class="page">
+    <div class="auth-card">
+      <h2>কাস্টমার কেয়ার সাপোর্ট</h2>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">যেকোনো সমস্যায় আমাদের অফিশিয়াল সাপোর্টে যোগাযোগ করুন।</p>
+      <div class="menu-list" style="margin-bottom: 15px;">
+        <div class="menu-item" onclick="showToast('টেলিগ্রাম চ্যানেল ওপেন হচ্ছে...')">
+          <span class="menu-icon">✈️</span>
+          <div><h4>অফিশিয়াল টেলিগ্রাম চ্যানেল</h4><p>প্রেডিকশন ও আপডেট পেতে যুক্ত হোন</p></div>
+        </div>
+        <div class="menu-item" onclick="showToast('লাইভ চ্যাট এজেন্ট সংযুক্ত হচ্ছে...')">
+          <span class="menu-icon">💬</span>
+          <div><h4>লাইভ চ্যাট এজেন্ট</h4><p>২৪ ঘণ্টা ইনস্ট্যান্ট সাপোর্ট</p></div>
+        </div>
+      </div>
+      <button class="btn-submit" style="background: #334155;" onclick="showPage('profilePage')">ফিরে যান</button>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION PAGE -->
+  <div id="notificationPage" class="page">
+    <div class="auth-card">
+      <h2>নোটিফিকেশন ও অ্যানাউন্সমেন্ট</h2>
+      <div style="background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; margin-bottom: 10px;">
+        <h4 style="font-size: 13px; color: #f59e0b;">🎉 নতুন বছরের বোনাস অফার!</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin-top: 4px;">প্রতিটি প্রথম ডিপোজিটে পাচ্ছেন অতিরিক্ত ১০% ক্যাশব্যাক বোনাস।</p>
+      </div>
+      <div style="background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; margin-bottom: 15px;">
+        <h4 style="font-size: 13px; color: #38bdf8;">⚙️ সার্ভার মেইনটেনেন্স আপডেট</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin-top: 4px;">আমাদের পেমেন্ট গেটওয়ে সম্পূর্ণ সুরক্ষিত এবং অটোমেটিক করা হয়েছে।</p>
+      </div>
+      <button class="btn-submit" style="background: #334155;" onclick="showPage('profilePage')">ফিরে যান</button>
+    </div>
+  </div>
+
+  <!-- SECURITY PAGE -->
+  <div id="securityPage" class="page">
+    <div class="auth-card">
+      <h2>পাসওয়ার্ড পরিবর্তন</h2>
+      <div class="input-group">
+        <label>পুরাতন পাসওয়ার্ড</label>
+        <input type="password" id="oldPass" placeholder="পুরোনো পাসওয়ার্ড দিন">
+      </div>
+      <div class="input-group">
+        <label>নতুন পাসওয়ার্ড</label>
+        <input type="password" id="newPass" placeholder="নতুন পাসওয়ার্ড দিন">
+      </div>
+      <button class="btn-submit" onclick="changePassword()">পাসওয়ার্ড পরিবর্তন করুন</button>
+      <button class="btn-submit" style="background: #334155; margin-top: 8px;" onclick="showPage('profilePage')">ফিরে যান</button>
     </div>
   </div>
 
@@ -244,7 +378,15 @@
         <label>পেমেন্ট মেথড</label>
         <select id="depMethod"><option>bKash Personal</option><option>Nagad Personal</option></select>
       </div>
-      <p style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">আমাদের মার্চেন্ট নম্বর: <b>01700000000</b></p>
+      
+      <div style="background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div>
+          <span style="font-size: 11px; color: #94a3b8; display:block;">আমাদের মার্চেন্ট নম্বর:</span>
+          <b id="merchantNumberText" style="font-size: 15px; color: #f59e0b;">01700000000</b>
+        </div>
+        <button type="button" onclick="copyMerchantNumber()" style="background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">কপি করুন</button>
+      </div>
+
       <div class="input-group">
         <label>পরিমাণ (BDT)</label>
         <input type="number" id="depAmount" placeholder="সর্বনিম্ন ৩০০ টাকা">
@@ -254,6 +396,7 @@
         <input type="text" id="depTrx" placeholder="Example: 8N7A6D5S">
       </div>
       <button class="btn-submit" onclick="submitDeposit()">ডিপোজিট কনফার্ম</button>
+      <button class="btn-submit" style="background: #334155; margin-top: 8px;" onclick="showPage('profilePage')">বাতিল</button>
     </div>
   </div>
 
@@ -274,6 +417,7 @@
         <input type="number" id="wdAmount" placeholder="সর্বনিম্ন ৫০০ টাকা">
       </div>
       <button class="btn-submit" onclick="submitWithdraw()">উইথড্র করুন</button>
+      <button class="btn-submit" style="background: #334155; margin-top: 8px;" onclick="showPage('profilePage')">বাতিল</button>
     </div>
   </div>
 
@@ -293,19 +437,6 @@
         <button class="btn-submit" style="background:#64748b; margin-top:0;" onclick="closeBetModal()">বাতিল</button>
         <button class="btn-submit" style="margin-top:0;" onclick="confirmBet()">কনফার্ম</button>
       </div>
-    </div>
-  </div>
-
-  <!-- REFERRAL MODAL -->
-  <div id="referModal" class="modal">
-    <div class="modal-content" style="text-align: center;">
-      <h3>বন্ধুদের ইনভাইট করুন</h3>
-      <p style="font-size: 12px; color: #94a3b8; margin: 10px 0;">আপনার রেফার লিংক শেয়ার করে রিওয়ার্ড অর্জন করুন।</p>
-      <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px;">
-        <span id="referLinkText" style="font-size: 11px; color: #38bdf8; word-break: break-all;">-</span>
-      </div>
-      <button class="btn-submit" style="margin-top:0;" onclick="copyReferLink()">লিংক কপি করুন</button>
-      <button class="btn-submit" style="background:#334155; margin-top:8px;" onclick="closeReferModal()">বন্ধ করুন</button>
     </div>
   </div>
 
