@@ -3,6 +3,8 @@ let selectedType = "";
 let currentPeriod = 20260907001;
 let myBets = [];
 let gameHistory = [];
+let depositHistory = [];
+let withdrawHistory = [];
 let isLocked = false;
 
 window.onload = function() {
@@ -12,23 +14,15 @@ window.onload = function() {
     loginUser(false);
   }
 
-  const savedHistory = localStorage.getItem('bdgame24_history');
-  if(savedHistory) {
-    gameHistory = JSON.parse(savedHistory);
-  }
-
-  const savedBets = localStorage.getItem('bdgame24_mybets');
-  if(savedBets) {
-    myBets = JSON.parse(savedBets);
-  }
-
-  const savedPeriod = localStorage.getItem('bdgame24_period');
-  if(savedPeriod) {
-    currentPeriod = parseInt(savedPeriod);
-  }
+  if(localStorage.getItem('bdgame24_history')) gameHistory = JSON.parse(localStorage.getItem('bdgame24_history'));
+  if(localStorage.getItem('bdgame24_mybets')) myBets = JSON.parse(localStorage.getItem('bdgame24_mybets'));
+  if(localStorage.getItem('bdgame24_period')) currentPeriod = parseInt(localStorage.getItem('bdgame24_period'));
+  if(localStorage.getItem('bdgame24_depRec')) depositHistory = JSON.parse(localStorage.getItem('bdgame24_depRec'));
+  if(localStorage.getItem('bdgame24_wdRec')) withdrawHistory = JSON.parse(localStorage.getItem('bdgame24_wdRec'));
 
   updateGameHistoryTable();
   updateMyBetsTable();
+  updateRecordTables();
   const periodEl = document.getElementById('periodId');
   if(periodEl) periodEl.innerText = currentPeriod;
 };
@@ -43,7 +37,6 @@ function showToast(msg, type = "success") {
   setTimeout(() => toast.remove(), 3000);
 }
 
-// "কাজ চলছে" নোটিফিকেশন ফাংশন
 function showWorkInProgress() {
   showToast("কাজ চলছে! শীঘ্রই আসছে...", "error");
 }
@@ -52,13 +45,33 @@ function showPage(pageId) {
   document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
   const targetPage = document.getElementById(pageId);
   if(targetPage) targetPage.classList.add('active');
+
+  if(pageId === 'referralPage' && currentUser) {
+    updateReferralDashboard();
+  }
 }
 
 function switchGameTab(tabId, element) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('#gamePage .tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('#gamePage .tab-content').forEach(tab => tab.classList.remove('active'));
   element.classList.add('active');
   document.getElementById(tabId).classList.add('active');
+}
+
+function switchRecordTab(tabId, element) {
+  document.querySelectorAll('#recordsPage .tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('#recordsPage .tab-content').forEach(tab => tab.classList.remove('active'));
+  element.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function copyMerchantNumber() {
+  const num = document.getElementById('merchantNumberText').innerText;
+  navigator.clipboard.writeText(num).then(() => {
+    showToast("নম্বর সফলভাবে কপি হয়েছে!");
+  }).catch(() => {
+    showToast("কপি করা যায়নি!", "error");
+  });
 }
 
 // Authentication
@@ -73,7 +86,9 @@ if(regForm) {
       phone, 
       uid: Math.floor(100000 + Math.random() * 900000), 
       balance: 0.00,
-      referredBy: inviteCode || "None"
+      referredBy: inviteCode || "None",
+      referCount: 0,
+      referBonusAmt: 0.00
     };
     saveAndLogin();
   });
@@ -84,7 +99,7 @@ if(loginForm) {
   loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const phone = document.getElementById('loginPhone').value;
-    currentUser = { phone, uid: Math.floor(100000 + Math.random() * 900000), balance: 0.00 };
+    currentUser = { phone, uid: Math.floor(100000 + Math.random() * 900000), balance: 0.00, referCount: 3, referBonusAmt: 250.00 };
     saveAndLogin();
   });
 }
@@ -110,24 +125,31 @@ function logout() {
   showPage('loginPage');
 }
 
-// Referral Modal Functions
-function openReferModal() {
-  if(!currentUser) { showToast("আগে লগইন করুন!", "error"); return; }
-  const referUrl = window.location.origin + "?invite=" + currentUser.uid;
-  const referLinkEl = document.getElementById('referLinkText');
-  if(referLinkEl) referLinkEl.innerText = referUrl;
-  document.getElementById('referModal').style.display = "flex";
+// Password Change
+function changePassword() {
+  const oldP = document.getElementById('oldPass').value;
+  const newP = document.getElementById('newPass').value;
+  if(!oldP || !newP) {
+    showToast("সব ফিল্ড পূরণ করুন!", "error");
+    return;
+  }
+  showToast("পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!");
+  showPage('profilePage');
 }
 
-function closeReferModal() {
-  document.getElementById('referModal').style.display = "none";
+// Referral Dashboard Logic
+function updateReferralDashboard() {
+  if(!currentUser) return;
+  const referUrl = window.location.origin + "?invite=" + currentUser.uid;
+  document.getElementById('referLinkText').innerText = referUrl;
+  document.getElementById('totalRefers').innerText = (currentUser.referCount || 0) + " জন";
+  document.getElementById('referBonus').innerText = (currentUser.referBonusAmt || 0).toFixed(2);
 }
 
 function copyReferLink() {
   const referUrl = window.location.origin + "?invite=" + (currentUser ? currentUser.uid : "");
   navigator.clipboard.writeText(referUrl).then(() => {
     showToast("রেফার লিংক সফলভাবে কপি হয়েছে!");
-    closeReferModal();
   }).catch(() => {
     showToast("কপি করতে সমস্যা হয়েছে!", "error");
   });
@@ -187,17 +209,24 @@ function confirmBet() {
 }
 
 function submitDeposit() {
+  const method = document.getElementById('depMethod').value;
   const amt = document.getElementById('depAmount').value;
   const trx = document.getElementById('depTrx').value;
   if(!amt || !trx) { showToast("সব তথ্য দিন!", "error"); return; }
   
   currentUser.balance += parseFloat(amt);
   saveUser();
+
+  depositHistory.unshift({ method, amount: amt, trx, status: 'Success' });
+  localStorage.setItem('bdgame24_depRec', JSON.stringify(depositHistory));
+  updateRecordTables();
+
   showToast("ডিপোজিট সফল হয়েছে!");
   showPage('profilePage');
 }
 
 function submitWithdraw() {
+  const method = document.getElementById('wdMethod').value;
   const amt = parseFloat(document.getElementById('wdAmount').value);
   const acc = document.getElementById('wdAccount').value;
   if(!amt || !acc) { showToast("তথ্য দিন!", "error"); return; }
@@ -205,6 +234,11 @@ function submitWithdraw() {
   
   currentUser.balance -= amt;
   saveUser();
+
+  withdrawHistory.unshift({ method, account: acc, amount: amt, status: 'Pending' });
+  localStorage.setItem('bdgame24_wdRec', JSON.stringify(withdrawHistory));
+  updateRecordTables();
+
   showToast("উইথড্র আবেদন সফল হয়েছে!");
   showPage('profilePage');
 }
@@ -223,16 +257,11 @@ function updateUI() {
   }
 }
 
-// 30 Seconds Timer Logic (Last 5 Seconds Locked)
+// Timer Logic
 let seconds = 30;
 setInterval(() => {
   seconds--;
-
-  if(seconds <= 5) {
-    isLocked = true;
-  } else {
-    isLocked = false;
-  }
+  isLocked = seconds <= 5;
 
   if(seconds < 0) {
     seconds = 30;
@@ -243,11 +272,7 @@ setInterval(() => {
   const timerEl = document.getElementById('timer');
   if(timerEl) {
     timerEl.innerText = "00:" + secText;
-    if(isLocked) {
-      timerEl.style.color = "#f59e0b";
-    } else {
-      timerEl.style.color = "#ef4444";
-    }
+    timerEl.style.color = isLocked ? "#f59e0b" : "#ef4444";
   }
 }, 1000);
 
@@ -257,13 +282,7 @@ function generateGameResult() {
   let color = randomNum % 2 === 0 ? "RED" : "GREEN";
   if(randomNum === 0 || randomNum === 5) color = "VIOLET";
   
-  const newResult = {
-    period: currentPeriod,
-    number: randomNum,
-    size: isBig,
-    color: color
-  };
-
+  const newResult = { period: currentPeriod, number: randomNum, size: isBig, color: color };
   gameHistory.unshift(newResult);
   if(gameHistory.length > 20) gameHistory.pop();
   localStorage.setItem('bdgame24_history', JSON.stringify(gameHistory));
@@ -315,4 +334,20 @@ function updateMyBetsTable() {
       <td style="color:${b.status === 'WON' ? '#10b981' : b.status === 'LOST' ? '#ef4444' : '#f59e0b'}">${b.status}</td>
     </tr>
   `).join('');
+}
+
+function updateRecordTables() {
+  const depBody = document.getElementById('depHistoryBody');
+  if(depBody) {
+    depBody.innerHTML = depositHistory.map(d => `
+      <tr><td>${d.method}</td><td>৳${d.amount}</td><td>${d.trx}</td><td style="color:#10b981;">${d.status}</td></tr>
+    `).join('');
+  }
+
+  const wdBody = document.getElementById('wdHistoryBody');
+  if(wdBody) {
+    wdBody.innerHTML = withdrawHistory.map(w => `
+      <tr><td>${w.method}</td><td>${w.account}</td><td>৳${w.amount}</td><td style="color:#f59e0b;">${w.status}</td></tr>
+    `).join('');
+  }
 }
