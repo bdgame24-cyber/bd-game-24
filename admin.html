@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD GAME 24 - Admin Control Panel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card" style="border-color: #ef4444;">
+            <h1 class="header-title" style="color: #ef4444;">ADMIN CONTROL PANEL</h1>
+            <p class="sub-title">BD GAME 24 Management Engine</p>
+        </div>
+
+        <div class="card">
+            <h3>Payment Gateway Control (Update Numbers)</h3>
+            <label>bKash Number:</label>
+            <input type="text" id="adminBkash" value="01700000000">
+            <button class="btn btn-blue" onclick="updateNumber('bkash', 'adminBkash')">Save bKash</button>
+
+            <label style="margin-top:10px; display:block;">Nagad Number:</label>
+            <input type="text" id="adminNagad" value="01800000000">
+            <button class="btn btn-blue" onclick="updateNumber('nagad', 'adminNagad')">Save Nagad</button>
+        </div>
+
+        <div class="card">
+            <h3>Manual Result Control (Force Winner)</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">
+                ইচ্ছামতো যেকোনো কালার সিলেক্ট করুন। সিলেক্ট না করলে সিস্টেম অটোমেটিক কম বেট হওয়া রঙকে বিজয়ী করবে।
+            </p>
+            <div class="btn-group">
+                <button class="btn btn-red" onclick="forceWinner('RED')">Force RED</button>
+                <button class="btn btn-green" onclick="forceWinner('GREEN')">Force GREEN</button>
+                <button class="btn btn-violet" onclick="forceWinner('VIOLET')">Force VIOLET</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateNumber(gateway, inputId) {
+            const newNumber = document.getElementById(inputId).value;
+            fetch('/api/admin/update-gateway', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ gateway, newNumber })
+            }).then(r => r.json()).then(res => {
+                alert(res.message || res.error);
+            });
+        }
+
+        function forceWinner(color) {
+            fetch('/api/admin/set-result', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ color })
+            }).then(r => r.json()).then(res => {
+                alert(res.message);
+            });
+        }
+    </script>
+</body>
+</html>
