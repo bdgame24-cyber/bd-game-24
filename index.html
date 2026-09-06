@@ -12,7 +12,7 @@
 
   <!-- Header -->
   <div class="header">
-    <span class="logo" onclick="location.href='admin.html'">BD GAME 24</span>
+    <span class="logo" onclick="showPage('homePage')">BD GAME 24</span>
     <div id="authHeaderBtns">
       <button class="btn-top" onclick="showPage('loginPage')">লগইন</button>
       <button class="btn-top primary" onclick="showPage('registerPage')">রেজিস্টার</button>
@@ -53,7 +53,7 @@
         </div>
         <div class="input-group">
           <label>রেফার কোড (ঐচ্ছিক)</label>
-          <input type="text" id="regInvite" placeholder="Invite Code">
+          <input type="text" id="regInvite" placeholder="ইনভাইট কোড দিন">
         </div>
         <button type="submit" class="btn-submit">রেজিস্টার করুন</button>
       </form>
@@ -64,8 +64,8 @@
   <!-- HOME PAGE -->
   <div id="homePage" class="page">
     <div class="banner">
-      <h2>BD GAME 24 COLOR PREDICTION</h2>
-      <p>বাংলাদেশের বিশ্বস্ত কালার গেম প্ল্যাটফর্ম</p>
+      <h2>BD GAME 24 OFFICIAL</h2>
+      <p>সেরা কালার প্রেডিকশন ও আর্নিং প্ল্যাটফর্ম</p>
     </div>
 
     <div class="winner-ticker">
@@ -74,26 +74,44 @@
       </marquee>
     </div>
 
-    <div class="notice-bar">📢 BD GAME 24 এ আপনাকে স্বাগতম। ২৪/৭ অটো ডিপোজিট ও উইথড্র সুবিধা।</div>
+    <div class="notice-bar">📢 ২৪/৭ অটো ডিপোজিট ও উইথড্র সুবিধা চালু রয়েছে।</div>
     
-    <div class="section-title">গেম অপশন</div>
+    <div class="section-title">পপুলার গেমসমূহ</div>
     <div class="game-grid">
       <div class="game-card" onclick="showPage('gamePage')">
+        <div class="game-icon">📈</div>
+        <p>Win Go</p>
+        <span class="sub-badge">লাইভ</span>
+      </div>
+      <div class="game-card" onclick="showWorkInProgress()">
         <div class="game-icon">🎰</div>
-        <p>Win Go 1Min</p>
+        <p>Aviator</p>
+        <span class="sub-badge soon">শীঘ্রই</span>
       </div>
-      <div class="game-card" onclick="alert('শীঘ্রই আসছে!')">
+      <div class="game-card" onclick="showWorkInProgress()">
         <div class="game-icon">🎲</div>
-        <p>Slots</p>
+        <p>Dice Roll</p>
+        <span class="sub-badge soon">শীঘ্রই</span>
       </div>
-      <div class="game-card" onclick="alert('শীঘ্রই আসছে!')">
+      <div class="game-card" onclick="showWorkInProgress()">
         <div class="game-icon">🃏</div>
-        <p>Casino</p>
+        <p>Andar Bahar</p>
+        <span class="sub-badge soon">শীঘ্রই</span>
+      </div>
+      <div class="game-card" onclick="showWorkInProgress()">
+        <div class="game-icon">⚽</div>
+        <p>Penalty Shoot</p>
+        <span class="sub-badge soon">শীঘ্রই</span>
+      </div>
+      <div class="game-card" onclick="showWorkInProgress()">
+        <div class="game-icon">🎡</div>
+        <p>Lucky Spin</p>
+        <span class="sub-badge soon">শীঘ্রই</span>
       </div>
     </div>
   </div>
 
-  <!-- GAME PAGE (Win Go) -->
+  <!-- GAME PAGE -->
   <div id="gamePage" class="page">
     <div class="wallet-card">
       <div>
@@ -105,12 +123,12 @@
 
     <div class="timer-card">
       <div>
-        <p class="game-name">Win Go 1Min</p>
+        <p class="game-name">Win Go 30Sec</p>
         <p class="period-id">Period: <span id="periodId">20260907001</span></p>
       </div>
       <div class="timer-box">
-        <p>সময় বাকি</p>
-        <div class="clock" id="timer">00:45</div>
+        <p style="font-size:10px; color:#94a3b8; text-align:center;">সময় বাকি</p>
+        <div class="clock" id="timer">00:30</div>
       </div>
     </div>
 
@@ -172,37 +190,49 @@
     </div>
   </div>
 
-  <!-- BET MODAL -->
-  <div id="betModal" class="modal">
-    <div class="modal-content">
-      <h3 id="modalSelectionTitle">সিলেক্ট করুন</h3>
-      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">অ্যামাউন্ট নির্বাচন করুন:</p>
-      <div class="amount-options">
-        <button onclick="setBetAmount(10)">৳১০</button>
-        <button onclick="setBetAmount(50)">৳৫০</button>
-        <button onclick="setBetAmount(100)">৳১০০</button>
-        <button onclick="setBetAmount(500)">৳৫০০</button>
-      </div>
-      <input type="number" id="customAmount" value="10" min="10" style="margin-top: 10px; text-align: center;">
-      <div style="margin-top: 15px; display: flex; gap: 10px;">
-        <button class="btn-submit" style="background:#64748b;" onclick="closeBetModal()">বাতিল</button>
-        <button class="btn-submit" onclick="confirmBet()">কনফার্ম</button>
-      </div>
-    </div>
-  </div>
-
   <!-- PROFILE PAGE -->
   <div id="profilePage" class="page">
-    <div class="profile-card">
-      <p>BD GAME 24 UID: <b id="profUid">-</b></p>
-      <p>ফোন: <b id="profPhone">-</b></p>
-      <h2>ব্যালেন্স: ৳ <span id="profBalance">0.00</span></h2>
+    <div class="profile-header-card">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-info">
+        <h3>UID: <span id="profUid">-</span></h3>
+        <p>নম্বর: <span id="profPhone">-</span></p>
+        <span class="vip-badge">VIP 1 Member</span>
+      </div>
     </div>
-    
+
+    <div class="profile-balance-box">
+      <div>
+        <p>মোট মেইন ব্যালেন্স</p>
+        <h2>৳ <span id="profBalance">0.00</span></h2>
+      </div>
+      <div class="profile-actions">
+        <button onclick="showPage('depositPage')">ডিপোজিট</button>
+        <button onclick="showPage('withdrawPage')">উইথড্র</button>
+      </div>
+    </div>
+
     <div class="menu-list">
-      <div class="menu-item" onclick="showPage('depositPage')">💳 ডিপোজিট করুন</div>
-      <div class="menu-item" onclick="showPage('withdrawPage')">🏧 উইথড্র করুন</div>
-      <div class="menu-item" onclick="logout()">🚪 লগআউট</div>
+      <div class="menu-item" onclick="showPage('depositPage')">
+        <span class="menu-icon">💳</span> 
+        <div><h4>ডিপোজিট করুন</h4><p>সকল রিচার্জ রেকর্ড</p></div>
+      </div>
+      <div class="menu-item" onclick="showPage('withdrawPage')">
+        <span class="menu-icon">🏧</span> 
+        <div><h4>উইথড্র করুন</h4><p>সকল ক্যাশআউট রেকর্ড</p></div>
+      </div>
+      <div class="menu-item" onclick="openReferModal()">
+        <span class="menu-icon">👥</span> 
+        <div><h4>ইনভাইট ও রেফারেল</h4><p>বন্ধুদের ইনভাইট করে বোনাস পান</p></div>
+      </div>
+      <div class="menu-item" onclick="showWorkInProgress()">
+        <span class="menu-icon">🎁</span> 
+        <div><h4>ডেইলি রিওয়ার্ড</h4><p>প্রতিদিনের ফ্রি বোনাস क्लेম</p></div>
+      </div>
+      <div class="menu-item" onclick="logout()">
+        <span class="menu-icon">🚪</span> 
+        <div><h4 style="color:#ef4444;">লগআউট করুন</h4><p>একাউন্ট থেকে বের হয়ে যান</p></div>
+      </div>
     </div>
   </div>
 
@@ -214,7 +244,7 @@
         <label>পেমেন্ট মেথড</label>
         <select id="depMethod"><option>bKash Personal</option><option>Nagad Personal</option></select>
       </div>
-      <p style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">আমাদের নম্বর: <b>01700000000</b></p>
+      <p style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">আমাদের মার্চেন্ট নম্বর: <b>01700000000</b></p>
       <div class="input-group">
         <label>পরিমাণ (BDT)</label>
         <input type="number" id="depAmount" placeholder="সর্বনিম্ন ৩০০ টাকা">
@@ -223,7 +253,7 @@
         <label>TrxID</label>
         <input type="text" id="depTrx" placeholder="Example: 8N7A6D5S">
       </div>
-      <button class="btn-submit" onclick="submitDeposit()">সাবমিট</button>
+      <button class="btn-submit" onclick="submitDeposit()">ডিপোজিট কনফার্ম</button>
     </div>
   </div>
 
@@ -244,6 +274,38 @@
         <input type="number" id="wdAmount" placeholder="সর্বনিম্ন ৫০০ টাকা">
       </div>
       <button class="btn-submit" onclick="submitWithdraw()">উইথড্র করুন</button>
+    </div>
+  </div>
+
+  <!-- BET MODAL -->
+  <div id="betModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalSelectionTitle">সিলেকশন</h3>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">অ্যামাউন্ট নির্বাচন করুন:</p>
+      <div class="amount-options">
+        <button onclick="setBetAmount(10)">৳১০</button>
+        <button onclick="setBetAmount(50)">৳৫০</button>
+        <button onclick="setBetAmount(100)">৳১০০</button>
+        <button onclick="setBetAmount(500)">৳৫০০</button>
+      </div>
+      <input type="number" id="customAmount" value="10" min="10" style="margin-top: 10px; width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px;">
+      <div style="margin-top: 15px; display: flex; gap: 10px;">
+        <button class="btn-submit" style="background:#64748b; margin-top:0;" onclick="closeBetModal()">বাতিল</button>
+        <button class="btn-submit" style="margin-top:0;" onclick="confirmBet()">কনফার্ম</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL MODAL -->
+  <div id="referModal" class="modal">
+    <div class="modal-content" style="text-align: center;">
+      <h3>বন্ধুদের ইনভাইট করুন</h3>
+      <p style="font-size: 12px; color: #94a3b8; margin: 10px 0;">আপনার রেফার লিংক শেয়ার করে রিওয়ার্ড অর্জন করুন।</p>
+      <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px;">
+        <span id="referLinkText" style="font-size: 11px; color: #38bdf8; word-break: break-all;">-</span>
+      </div>
+      <button class="btn-submit" style="margin-top:0;" onclick="copyReferLink()">লিংক কপি করুন</button>
+      <button class="btn-submit" style="background:#334155; margin-top:8px;" onclick="closeReferModal()">বন্ধ করুন</button>
     </div>
   </div>
 
