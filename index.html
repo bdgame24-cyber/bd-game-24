@@ -1,90 +1,366 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BD GAME 24 - Win Go</title>
-  <link rel="stylesheet" href="/style.css">
+  <title>HGNICE Game Platform</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+
+  <!-- Toast Notification Box -->
+  <div id="toastBox" class="toast-box"></div>
+
+  <!-- Header Navigation -->
+  <div class="header">
+    <span class="logo" onclick="toggleAdminPanel()">HGNICE</span>
+    <div id="authHeaderBtns">
+      <button class="btn-top" onclick="showPage('loginPage')">লগইন</button>
+      <button class="btn-top primary" onclick="showPage('registerPage')">রেজিস্টার</button>
+    </div>
+  </div>
+
+  <!-- LOGIN PAGE -->
+  <div id="loginPage" class="page active">
+    <div class="auth-card">
+      <h2>অ্যাকোউন্ট লগইন</h2>
+      <form id="loginForm">
+        <div class="input-group">
+          <label>ফোন নম্বর</label>
+          <input type="text" id="loginPhone" placeholder="01XXXXXXXXX" required>
+        </div>
+        <div class="input-group">
+          <label>পাসওয়ার্ড</label>
+          <input type="password" id="loginPass" placeholder="পাসওয়ার্ড দিন" required>
+        </div>
+        <button type="submit" class="btn-submit">লগইন করুন</button>
+      </form>
+      <p class="auth-switch">অ্যাকোউন্ট নেই? <a href="#" onclick="showPage('registerPage')">নতুন অ্যাকাউন্ট খুলুন</a></p>
+    </div>
+  </div>
+
+  <!-- REGISTER PAGE -->
+  <div id="registerPage" class="page">
+    <div class="auth-card">
+      <h2>নতুন অ্যাকাউন্ট খুলুন</h2>
+      <form id="registerForm">
+        <div class="input-group">
+          <label>ফোন নম্বর</label>
+          <input type="text" id="regPhone" placeholder="01XXXXXXXXX" required>
+        </div>
+        <div class="input-group">
+          <label>পাসওয়ার্ড</label>
+          <input type="password" id="regPass" placeholder="পাসওয়ার্ড দিন" required>
+        </div>
+        <div class="input-group">
+          <label>ইনভাইট কোড (ঐচ্ছিক)</label>
+          <input type="text" id="regInvite" placeholder="Invite Code">
+        </div>
+        <button type="submit" class="btn-submit">রেজিস্টার করুন</button>
+      </form>
+      <p class="auth-switch">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" onclick="showPage('loginPage')">লগইন করুন</a></p>
+    </div>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div id="homePage" class="page">
+    <div class="banner">
+      <h2>HGNICE COLOR GAME</h2>
+      <p>খেলুন এবং প্রতিদিন আয় করুন</p>
+    </div>
+
+    <!-- Live Winners Ticker -->
+    <div class="winner-ticker">
+      <marquee behavior="scroll" direction="left" scrollamount="5">
+        🎉 User 017***34 Won ৳500.00 | 🎉 User 018***89 Won ৳1,200.00 | 🎉 User 019***12 Won ৳2,500.00
+      </marquee>
+    </div>
+
+    <div class="notice-bar">📢 আমাদের কাস্টমার সার্ভিস ২৪/৭ লাইভ চ্যাটে উপলব্ধ।</div>
     
-    <div class="card wallet-card">
-      <div class="wallet-balance">
-        <p>Wallet Balance</p>
-        <h2>৳ <span id="balance">1000.00</span></h2>
+    <div class="section-title">গেম ক্যাটাগরি</div>
+    <div class="game-grid">
+      <div class="game-card" onclick="showPage('gamePage')">
+        <div class="game-icon">🎰</div>
+        <p>Win Go 1Min</p>
       </div>
-      <div class="wallet-btns">
-        <button class="btn btn-withdraw">Withdraw</button>
-        <button class="btn btn-deposit">Deposit</button>
+      <div class="game-card" onclick="alert('শীঘ্রই আসছে!')">
+        <div class="game-icon">🎲</div>
+        <p>Slots</p>
+      </div>
+      <div class="game-card" onclick="alert('শীঘ্রই আসছে!')">
+        <div class="game-icon">🃏</div>
+        <p>Casino</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME PAGE (Win Go) -->
+  <div id="gamePage" class="page">
+    <div class="wallet-card">
+      <div>
+        <p>বর্তমান ব্যালেন্স</p>
+        <h2>৳ <span id="gameBalance">0.00</span></h2>
+      </div>
+      <button class="btn-deposit" onclick="showPage('depositPage')">ডিপোজিট</button>
+    </div>
+
+    <div class="timer-card">
+      <div>
+        <p class="game-name">Win Go 1Min</p>
+        <p class="period-id">Period: <span id="periodId">20260907001</span></p>
+      </div>
+      <div class="timer-box">
+        <p>সময় বাকি</p>
+        <div class="clock" id="timer">00:45</div>
       </div>
     </div>
 
-    <div class="notice-bar">
-      <span>📢 Attention! Customer service only uses LIVE CHAT...</span>
-    </div>
-
-    <div class="time-tabs">
-      <div class="tab active">Win Go<br><small>1Min</small></div>
-      <div class="tab">Win Go<br><small>3Min</small></div>
-      <div class="tab">Win Go<br><small>5Min</small></div>
-      <div class="tab">Win Go<br><small>10Min</small></div>
-    </div>
-
-    <div class="card timer-card">
-      <div class="timer-info">
-        <p class="game-title">Win Go 1Min</p>
-        <p class="period-text">Period: <span id="periodId">20260907001</span></p>
-      </div>
-      <div class="timer-clock">
-        <p>Time remaining</p>
-        <div class="clock-display" id="timer">00:45</div>
-      </div>
-    </div>
-
-    <div class="action-btns">
-      <button class="btn-color btn-green" onclick="selectBet('GREEN')">Green</button>
-      <button class="btn-color btn-violet" onclick="selectBet('VIOLET')">Violet</button>
-      <button class="btn-color btn-red" onclick="selectBet('RED')">Red</button>
+    <div class="color-btns">
+      <button class="btn-color green" onclick="openBetModal('GREEN')">Green</button>
+      <button class="btn-color violet" onclick="openBetModal('VIOLET')">Violet</button>
+      <button class="btn-color red" onclick="openBetModal('RED')">Red</button>
     </div>
 
     <div class="number-grid">
-      <button class="num-btn red-violet" onclick="selectNum(0)">0</button>
-      <button class="num-btn green" onclick="selectNum(1)">1</button>
-      <button class="num-btn red" onclick="selectNum(2)">2</button>
-      <button class="num-btn green" onclick="selectNum(3)">3</button>
-      <button class="num-btn red" onclick="selectNum(4)">4</button>
-      <button class="num-btn red-violet" onclick="selectNum(5)">5</button>
-      <button class="num-btn red" onclick="selectNum(6)">6</button>
-      <button class="num-btn green" onclick="selectNum(7)">7</button>
-      <button class="num-btn red" onclick="selectNum(8)">8</button>
-      <button class="num-btn green" onclick="selectNum(9)">9</button>
+      <button class="num-btn red-violet" onclick="openBetModal('0')">0</button>
+      <button class="num-btn green" onclick="openBetModal('1')">1</button>
+      <button class="num-btn red" onclick="openBetModal('2')">2</button>
+      <button class="num-btn green" onclick="openBetModal('3')">3</button>
+      <button class="num-btn red" onclick="openBetModal('4')">4</button>
+      <button class="num-btn red-violet" onclick="openBetModal('5')">5</button>
+      <button class="num-btn red" onclick="openBetModal('6')">6</button>
+      <button class="num-btn green" onclick="openBetModal('7')">7</button>
+      <button class="num-btn red" onclick="openBetModal('8')">8</button>
+      <button class="num-btn green" onclick="openBetModal('9')">9</button>
     </div>
 
     <div class="size-btns">
-      <button class="btn-size btn-big" onclick="selectBet('BIG')">Big</button>
-      <button class="btn-size btn-small" onclick="selectBet('SMALL')">Small</button>
+      <button class="btn-size big" onclick="openBetModal('BIG')">Big</button>
+      <button class="btn-size small" onclick="openBetModal('SMALL')">Small</button>
     </div>
 
+    <!-- Tab Selection -->
+    <div class="tab-container" style="margin-top: 15px;">
+      <button class="tab-btn active" onclick="switchGameTab('historyTab', this)">গেম হিস্ট্রি</button>
+      <button class="tab-btn" onclick="switchGameTab('myBetsTab', this)">আমার বেটিং রেকর্ড</button>
+    </div>
+
+    <div id="historyTab" class="history-section tab-content active">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Number</th>
+            <th>Big/Small</th>
+            <th>Color</th>
+          </tr>
+        </thead>
+        <tbody id="gameHistoryBody">
+          <!-- Dynamic Results -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="myBetsTab" class="history-section tab-content">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Selection</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="myBetsBody">
+          <!-- User Bets -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
+  <!-- BET MODAL -->
+  <div id="betModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalSelectionTitle">সিলেক্ট করুন</h3>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">বেট অ্যামাউন্ট সিলেক্ট করুন:</p>
+      <div class="amount-options">
+        <button onclick="setBetAmount(10)">৳১০</button>
+        <button onclick="setBetAmount(50)">৳৫০</button>
+        <button onclick="setBetAmount(100)">৳১০০</button>
+        <button onclick="setBetAmount(500)">৳৫০০</button>
+      </div>
+      <input type="number" id="customAmount" value="10" min="10" style="margin-top: 10px; text-align: center;">
+      <div style="margin-top: 15px; display: flex; gap: 10px;">
+        <button class="btn-submit" style="background:#64748b;" onclick="closeBetModal()">বাতিল</button>
+        <button class="btn-submit" onclick="confirmBet()">কনফার্ম</button>
+      </div>
+    </div>
+  </div>
 
-    function selectBet(type) {
-      alert("Selected Bet: " + type);
-    }
+  <!-- ACTIVITY & GIFT PAGE -->
+  <div id="activityPage" class="page">
+    <div class="auth-card">
+      <h2>গিফট কোড ও বোনাস</h2>
+      <div class="input-group" style="margin-top: 15px;">
+        <label>গিফট রিডিম কোড দিন</label>
+        <input type="text" id="giftCodeInput" placeholder="Enter Gift Code">
+      </div>
+      <button class="btn-submit" onclick="claimGiftCode()">ক্লেম বোনাস</button>
+      
+      <hr style="border-color: #334155; margin: 20px 0;">
+      
+      <div style="text-align: center;">
+        <h3>ডেইলি চেক-ইন বোনাস</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin: 5px 0 15px;">প্রতিদিন লগইন করে বোনাস পান</p>
+        <button class="btn-submit" style="background: #10b981;" onclick="dailyCheckIn()">আজকের বোনাস নিন (৳১০)</button>
+      </div>
+    </div>
+  </div>
 
-    function selectNum(num) {
-      alert("Selected Number: " + num);
-    }
+  <!-- PROMOTION / REFER PAGE -->
+  <div id="promoPage" class="page">
+    <div class="auth-card" style="text-align: center;">
+      <h2>প্রমোশন ও রেফার টিম</h2>
+      <p style="font-size: 13px; color: #94a3b8; margin-top: 5px;">বন্ধুদের ইনভাইট করুন এবং ৩ লেভেলে কমিশন পান</p>
+      
+      <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin: 15px 0;">
+        <p style="font-size: 12px; color: #94a3b8;">আপনার ইনভাইট কোড:</p>
+        <h3 id="referCode" style="color: #ef4444; margin: 5px 0;">-</h3>
+        <button class="btn-submit" onclick="copyReferLink()">লিংক কপি করুন</button>
+      </div>
 
-    socket.on('timer_tick', (data) => {
-      document.getElementById('periodId').innerText = data.periodId;
-      let sec = data.timer < 10 ? '0' + data.timer : data.timer;
-      document.getElementById('timer').innerText = "00:" + sec;
-    });
-  </script>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <div style="flex: 1; background: #0f172a; padding: 10px; border-radius: 8px;">
+          <p style="font-size: 11px; color: #94a3b8;">Level 1 Team</p>
+          <h4 style="color: #10b981;">0 Person</h4>
+        </div>
+        <div style="flex: 1; background: #0f172a; padding: 10px; border-radius: 8px;">
+          <p style="font-size: 11px; color: #94a3b8;">Total Commission</p>
+          <h4 style="color: #f59e0b;">৳ 0.00</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div id="profilePage" class="page">
+    <div class="profile-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span class="vip-badge">VIP 1</span>
+        <span style="font-size: 12px; color: #94a3b8;">UID: <b id="profUid">-</b></span>
+      </div>
+      <p>ফোন নম্বর: <b id="profPhone">-</b></p>
+      <h2>ব্যালেন্স: ৳ <span id="profBalance">0.00</span></h2>
+    </div>
+    
+    <div class="menu-list">
+      <div class="menu-item" onclick="showPage('depositPage')">💳 ডিপোজিট করুন</div>
+      <div class="menu-item" onclick="showPage('withdrawPage')">🏧 উইথড্র করুন</div>
+      <div class="menu-item" onclick="showPage('activityPage')">🎁 গিফট কোড ও বোনাস</div>
+      <div class="menu-item" onclick="showPage('promoPage')">👥 রেফার ও টিম</div>
+      <div class="menu-item" onclick="showPage('historyPage')">📜 লেনদেন হিস্ট্রি</div>
+      <div class="menu-item" onclick="showPage('changePassPage')">🔒 পাসওয়ার্ড পরিবর্তন</div>
+      <div class="menu-item" onclick="showPage('supportPage')">🎧 কাস্টমার সার্ভিস</div>
+      <div class="menu-item" onclick="logout()">🚪 লগআউট</div>
+    </div>
+  </div>
+
+  <!-- DEPOSIT PAGE -->
+  <div id="depositPage" class="page">
+    <div class="auth-card">
+      <h2>টাকা ডিপোজিট</h2>
+      <div class="input-group">
+        <label>পেমেন্ট মেথড</label>
+        <select id="depMethod"><option>bKash Personal</option><option>Nagad Personal</option></select>
+      </div>
+      <p style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">আমাদের পার্সোনাল নম্বর: <b>01700000000</b> (ক্যাশ আউট/সেন্ড মানি করুন)</p>
+      <div class="input-group">
+        <label>পরিমাণ (BDT)</label>
+        <input type="number" id="depAmount" placeholder="সর্বনিম্ন ৩০০ টাকা">
+      </div>
+      <div class="input-group">
+        <label>TrxID (ট্রানজেকশন আইডি)</label>
+        <input type="text" id="depTrx" placeholder="Example: 8N7A6D5S">
+      </div>
+      <button class="btn-submit" onclick="submitDeposit()">সাবমিট করুন</button>
+    </div>
+  </div>
+
+  <!-- WITHDRAW PAGE -->
+  <div id="withdrawPage" class="page">
+    <div class="auth-card">
+      <h2>টাকা উইথড্র</h2>
+      <div class="input-group">
+        <label>উইথড্র মেথড</label>
+        <select id="wdMethod"><option>bKash</option><option>Nagad</option></select>
+      </div>
+      <div class="input-group">
+        <label>একাউন্ট নম্বর</label>
+        <input type="text" id="wdAccount" placeholder="নম্বর লিখুন">
+      </div>
+      <div class="input-group">
+        <label>পরিমাণ (BDT)</label>
+        <input type="number" id="wdAmount" placeholder="সর্বনিম্ন ৫০০ টাকা">
+      </div>
+      <button class="btn-submit" onclick="submitWithdraw()">উইথড্র করুন</button>
+    </div>
+  </div>
+
+  <!-- CHANGE PASSWORD PAGE -->
+  <div id="changePassPage" class="page">
+    <div class="auth-card">
+      <h2>পাসওয়ার্ড পরিবর্তন করুন</h2>
+      <div class="input-group">
+        <label>পুরাতন পাসওয়ার্ড</label>
+        <input type="password" placeholder="Old Password">
+      </div>
+      <div class="input-group">
+        <label>নতুন পাসওয়ার্ড</label>
+        <input type="password" placeholder="New Password">
+      </div>
+      <button class="btn-submit" onclick="showToast('পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!', 'success')">আপডেট করুন</button>
+    </div>
+  </div>
+
+  <!-- HISTORY PAGE -->
+  <div id="historyPage" class="page">
+    <div class="auth-card">
+      <h2>লেনদেন হিস্ট্রি</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>টাইপ</th>
+            <th>পরিমাণ</th>
+            <th>স্ট্যাটাস</th>
+          </tr>
+        </thead>
+        <tbody id="txHistoryBody">
+          <!-- Dynamic Tx Data -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SUPPORT PAGE -->
+  <div id="supportPage" class="page">
+    <div class="auth-card" style="text-align: center;">
+      <h2>কাস্টমার সাপোর্ট</h2>
+      <p style="margin: 15px 0; color: #94a3b8;">যে কোনো সমস্যায় আমাদের সাথে যোগাযোগ করুন:</p>
+      <button class="btn-submit" style="background:#0088cc; margin-bottom: 10px;" onclick="window.open('https://t.me', '_blank')">Telegram Support</button>
+      <button class="btn-submit" onclick="showToast('Live Chat শীঘ্রই আসছে!', 'info')">Live Chat</button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav" id="bottomNav" style="display:none;">
+    <div class="nav-item" onclick="showPage('homePage')">🏠 হোম</div>
+    <div class="nav-item" onclick="showPage('gamePage')">🎮 গেম</div>
+    <div class="nav-item" onclick="showPage('activityPage')">🎁 অ্যাক্টিভিটি</div>
+    <div class="nav-item" onclick="showPage('promoPage')">👥 প্রমোশন</div>
+    <div class="nav-item" onclick="showPage('profilePage')">👤 প্রোফাইল</div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
