@@ -3,42 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BD GAME 24 - Admin Control Panel</title>
+    <title>BD GAME 24 - Admin Panel</title>
     <link rel="stylesheet" href="/style.css">
-    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <div class="container">
-        <div class="card" style="border-color: #ef4444;">
-            <h1 class="header-title" style="color: #ef4444;">ADMIN CONTROL PANEL</h1>
-            <p class="sub-title">BD GAME 24 Management Engine</p>
+        <!-- Admin Login Form -->
+        <div class="card" id="loginCard">
+            <h2 class="header-title" style="color: #ef4444;">Admin Login</h2>
+            <br>
+            <label>Username:</label>
+            <input type="text" id="adminUser" placeholder="Enter Username">
+            <br><br>
+            <label>Password:</label>
+            <input type="password" id="adminPass" placeholder="Enter Password">
+            <br><br>
+            <button class="btn btn-red" style="width: 100%;" onclick="loginAdmin()">Login</button>
         </div>
 
-        <div class="card">
-            <h3>Payment Gateway Control (Update Numbers)</h3>
-            <label>bKash Number:</label>
-            <input type="text" id="adminBkash" value="01700000000">
-            <button class="btn btn-blue" onclick="updateNumber('bkash', 'adminBkash')">Save bKash</button>
+        <!-- Admin Control Panel (Login Completed) -->
+        <div id="adminPanel" style="display: none;">
+            <div class="card" style="border-color: #ef4444;">
+                <h1 class="header-title" style="color: #ef4444;">ADMIN CONTROL PANEL</h1>
+                <p class="sub-title">BD GAME 24 Management Engine</p>
+            </div>
 
-            <label style="margin-top:10px; display:block;">Nagad Number:</label>
-            <input type="text" id="adminNagad" value="01800000000">
-            <button class="btn btn-blue" onclick="updateNumber('nagad', 'adminNagad')">Save Nagad</button>
-        </div>
+            <div class="card">
+                <h3>Payment Gateway Control</h3>
+                <label>bKash Number:</label>
+                <input type="text" id="adminBkash" value="01700000000">
+                <button class="btn btn-blue" onclick="updateNumber('bkash', 'adminBkash')">Save bKash</button>
 
-        <div class="card">
-            <h3>Manual Result Control (Force Winner)</h3>
-            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">
-                ইচ্ছামতো যেকোনো কালার সিলেক্ট করুন। সিলেক্ট না করলে সিস্টেম অটোমেটিক কম বেট হওয়া রঙকে বিজয়ী করবে।
-            </p>
-            <div class="btn-group">
-                <button class="btn btn-red" onclick="forceWinner('RED')">Force RED</button>
-                <button class="btn btn-green" onclick="forceWinner('GREEN')">Force GREEN</button>
-                <button class="btn btn-violet" onclick="forceWinner('VIOLET')">Force VIOLET</button>
+                <br><br>
+                <label>Nagad Number:</label>
+                <input type="text" id="adminNagad" value="01800000000">
+                <button class="btn btn-blue" onclick="updateNumber('nagad', 'adminNagad')">Save Nagad</button>
+            </div>
+
+            <div class="card">
+                <h3>Manual Result Control (Force Winner)</h3>
+                <div class="btn-group">
+                    <button class="btn btn-red" onclick="forceWinner('RED')">Force RED</button>
+                    <button class="btn btn-green" onclick="forceWinner('GREEN')">Force GREEN</button>
+                    <button class="btn btn-violet" onclick="forceWinner('VIOLET')">Force VIOLET</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        function loginAdmin() {
+            const username = document.getElementById('adminUser').value;
+            const password = document.getElementById('adminPass').value;
+
+            fetch('/api/admin/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, password })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if(res.error) {
+                    alert(res.error);
+                } else {
+                    document.getElementById('loginCard').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                }
+            });
+        }
+
         function updateNumber(gateway, inputId) {
             const newNumber = document.getElementById(inputId).value;
             fetch('/api/admin/update-gateway', {
@@ -61,4 +94,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
