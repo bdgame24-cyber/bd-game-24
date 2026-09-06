@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HGNICE Game Platform</title>
+  <title>BD GAME 24 - Color Prediction Platform</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Toast Notification Box -->
   <div id="toastBox" class="toast-box"></div>
 
-  <!-- Header Navigation -->
+  <!-- Header -->
   <div class="header">
-    <span class="logo" onclick="toggleAdminPanel()">HGNICE</span>
+    <span class="logo" onclick="location.href='admin.html'">BD GAME 24</span>
     <div id="authHeaderBtns">
       <button class="btn-top" onclick="showPage('loginPage')">লগইন</button>
       <button class="btn-top primary" onclick="showPage('registerPage')">রেজিস্টার</button>
@@ -23,7 +22,7 @@
   <!-- LOGIN PAGE -->
   <div id="loginPage" class="page active">
     <div class="auth-card">
-      <h2>অ্যাকোউন্ট লগইন</h2>
+      <h2>BD GAME 24 লগইন</h2>
       <form id="loginForm">
         <div class="input-group">
           <label>ফোন নম্বর</label>
@@ -35,14 +34,14 @@
         </div>
         <button type="submit" class="btn-submit">লগইন করুন</button>
       </form>
-      <p class="auth-switch">অ্যাকোউন্ট নেই? <a href="#" onclick="showPage('registerPage')">নতুন অ্যাকাউন্ট খুলুন</a></p>
+      <p class="auth-switch">অ্যাকোউন্ট নেই? <a href="#" onclick="showPage('registerPage')">রেজিস্টার করুন</a></p>
     </div>
   </div>
 
   <!-- REGISTER PAGE -->
   <div id="registerPage" class="page">
     <div class="auth-card">
-      <h2>নতুন অ্যাকাউন্ট খুলুন</h2>
+      <h2>BD GAME 24 নতুন একাউন্ট</h2>
       <form id="registerForm">
         <div class="input-group">
           <label>ফোন নম্বর</label>
@@ -53,7 +52,7 @@
           <input type="password" id="regPass" placeholder="পাসওয়ার্ড দিন" required>
         </div>
         <div class="input-group">
-          <label>ইনভাইট কোড (ঐচ্ছিক)</label>
+          <label>রেফার কোড (ঐচ্ছিক)</label>
           <input type="text" id="regInvite" placeholder="Invite Code">
         </div>
         <button type="submit" class="btn-submit">রেজিস্টার করুন</button>
@@ -65,20 +64,19 @@
   <!-- HOME PAGE -->
   <div id="homePage" class="page">
     <div class="banner">
-      <h2>HGNICE COLOR GAME</h2>
-      <p>খেলুন এবং প্রতিদিন আয় করুন</p>
+      <h2>BD GAME 24 COLOR PREDICTION</h2>
+      <p>বাংলাদেশের বিশ্বস্ত কালার গেম প্ল্যাটফর্ম</p>
     </div>
 
-    <!-- Live Winners Ticker -->
     <div class="winner-ticker">
       <marquee behavior="scroll" direction="left" scrollamount="5">
         🎉 User 017***34 Won ৳500.00 | 🎉 User 018***89 Won ৳1,200.00 | 🎉 User 019***12 Won ৳2,500.00
       </marquee>
     </div>
 
-    <div class="notice-bar">📢 আমাদের কাস্টমার সার্ভিস ২৪/৭ লাইভ চ্যাটে উপলব্ধ।</div>
+    <div class="notice-bar">📢 BD GAME 24 এ আপনাকে স্বাগতম। ২৪/৭ অটো ডিপোজিট ও উইথড্র সুবিধা।</div>
     
-    <div class="section-title">গেম ক্যাটাগরি</div>
+    <div class="section-title">গেম অপশন</div>
     <div class="game-grid">
       <div class="game-card" onclick="showPage('gamePage')">
         <div class="game-icon">🎰</div>
@@ -140,10 +138,9 @@
       <button class="btn-size small" onclick="openBetModal('SMALL')">Small</button>
     </div>
 
-    <!-- Tab Selection -->
     <div class="tab-container" style="margin-top: 15px;">
       <button class="tab-btn active" onclick="switchGameTab('historyTab', this)">গেম হিস্ট্রি</button>
-      <button class="tab-btn" onclick="switchGameTab('myBetsTab', this)">আমার বেটিং রেকর্ড</button>
+      <button class="tab-btn" onclick="switchGameTab('myBetsTab', this)">আমার বেট</button>
     </div>
 
     <div id="historyTab" class="history-section tab-content active">
@@ -156,9 +153,7 @@
             <th>Color</th>
           </tr>
         </thead>
-        <tbody id="gameHistoryBody">
-          <!-- Dynamic Results -->
-        </tbody>
+        <tbody id="gameHistoryBody"></tbody>
       </table>
     </div>
 
@@ -172,9 +167,7 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody id="myBetsBody">
-          <!-- User Bets -->
-        </tbody>
+        <tbody id="myBetsBody"></tbody>
       </table>
     </div>
   </div>
@@ -183,7 +176,7 @@
   <div id="betModal" class="modal">
     <div class="modal-content">
       <h3 id="modalSelectionTitle">সিলেক্ট করুন</h3>
-      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">বেট অ্যামাউন্ট সিলেক্ট করুন:</p>
+      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">অ্যামাউন্ট নির্বাচন করুন:</p>
       <div class="amount-options">
         <button onclick="setBetAmount(10)">৳১০</button>
         <button onclick="setBetAmount(50)">৳৫০</button>
@@ -198,70 +191,17 @@
     </div>
   </div>
 
-  <!-- ACTIVITY & GIFT PAGE -->
-  <div id="activityPage" class="page">
-    <div class="auth-card">
-      <h2>গিফট কোড ও বোনাস</h2>
-      <div class="input-group" style="margin-top: 15px;">
-        <label>গিফট রিডিম কোড দিন</label>
-        <input type="text" id="giftCodeInput" placeholder="Enter Gift Code">
-      </div>
-      <button class="btn-submit" onclick="claimGiftCode()">ক্লেম বোনাস</button>
-      
-      <hr style="border-color: #334155; margin: 20px 0;">
-      
-      <div style="text-align: center;">
-        <h3>ডেইলি চেক-ইন বোনাস</h3>
-        <p style="font-size: 12px; color: #94a3b8; margin: 5px 0 15px;">প্রতিদিন লগইন করে বোনাস পান</p>
-        <button class="btn-submit" style="background: #10b981;" onclick="dailyCheckIn()">আজকের বোনাস নিন (৳১০)</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROMOTION / REFER PAGE -->
-  <div id="promoPage" class="page">
-    <div class="auth-card" style="text-align: center;">
-      <h2>প্রমোশন ও রেফার টিম</h2>
-      <p style="font-size: 13px; color: #94a3b8; margin-top: 5px;">বন্ধুদের ইনভাইট করুন এবং ৩ লেভেলে কমিশন পান</p>
-      
-      <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin: 15px 0;">
-        <p style="font-size: 12px; color: #94a3b8;">আপনার ইনভাইট কোড:</p>
-        <h3 id="referCode" style="color: #ef4444; margin: 5px 0;">-</h3>
-        <button class="btn-submit" onclick="copyReferLink()">লিংক কপি করুন</button>
-      </div>
-
-      <div style="display: flex; gap: 10px; margin-top: 15px;">
-        <div style="flex: 1; background: #0f172a; padding: 10px; border-radius: 8px;">
-          <p style="font-size: 11px; color: #94a3b8;">Level 1 Team</p>
-          <h4 style="color: #10b981;">0 Person</h4>
-        </div>
-        <div style="flex: 1; background: #0f172a; padding: 10px; border-radius: 8px;">
-          <p style="font-size: 11px; color: #94a3b8;">Total Commission</p>
-          <h4 style="color: #f59e0b;">৳ 0.00</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- PROFILE PAGE -->
   <div id="profilePage" class="page">
     <div class="profile-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span class="vip-badge">VIP 1</span>
-        <span style="font-size: 12px; color: #94a3b8;">UID: <b id="profUid">-</b></span>
-      </div>
-      <p>ফোন নম্বর: <b id="profPhone">-</b></p>
+      <p>BD GAME 24 UID: <b id="profUid">-</b></p>
+      <p>ফোন: <b id="profPhone">-</b></p>
       <h2>ব্যালেন্স: ৳ <span id="profBalance">0.00</span></h2>
     </div>
     
     <div class="menu-list">
       <div class="menu-item" onclick="showPage('depositPage')">💳 ডিপোজিট করুন</div>
       <div class="menu-item" onclick="showPage('withdrawPage')">🏧 উইথড্র করুন</div>
-      <div class="menu-item" onclick="showPage('activityPage')">🎁 গিফট কোড ও বোনাস</div>
-      <div class="menu-item" onclick="showPage('promoPage')">👥 রেফার ও টিম</div>
-      <div class="menu-item" onclick="showPage('historyPage')">📜 লেনদেন হিস্ট্রি</div>
-      <div class="menu-item" onclick="showPage('changePassPage')">🔒 পাসওয়ার্ড পরিবর্তন</div>
-      <div class="menu-item" onclick="showPage('supportPage')">🎧 কাস্টমার সার্ভিস</div>
       <div class="menu-item" onclick="logout()">🚪 লগআউট</div>
     </div>
   </div>
@@ -269,86 +209,41 @@
   <!-- DEPOSIT PAGE -->
   <div id="depositPage" class="page">
     <div class="auth-card">
-      <h2>টাকা ডিপোজিট</h2>
+      <h2>ডিপোজিট (bKash / Nagad)</h2>
       <div class="input-group">
         <label>পেমেন্ট মেথড</label>
         <select id="depMethod"><option>bKash Personal</option><option>Nagad Personal</option></select>
       </div>
-      <p style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">আমাদের পার্সোনাল নম্বর: <b>01700000000</b> (ক্যাশ আউট/সেন্ড মানি করুন)</p>
+      <p style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">আমাদের নম্বর: <b>01700000000</b></p>
       <div class="input-group">
         <label>পরিমাণ (BDT)</label>
         <input type="number" id="depAmount" placeholder="সর্বনিম্ন ৩০০ টাকা">
       </div>
       <div class="input-group">
-        <label>TrxID (ট্রানজেকশন আইডি)</label>
+        <label>TrxID</label>
         <input type="text" id="depTrx" placeholder="Example: 8N7A6D5S">
       </div>
-      <button class="btn-submit" onclick="submitDeposit()">সাবমিট করুন</button>
+      <button class="btn-submit" onclick="submitDeposit()">সাবমিট</button>
     </div>
   </div>
 
   <!-- WITHDRAW PAGE -->
   <div id="withdrawPage" class="page">
     <div class="auth-card">
-      <h2>টাকা উইথড্র</h2>
+      <h2>উইথড্র</h2>
       <div class="input-group">
-        <label>উইথড্র মেথড</label>
+        <label>মেথড</label>
         <select id="wdMethod"><option>bKash</option><option>Nagad</option></select>
       </div>
       <div class="input-group">
-        <label>একাউন্ট নম্বর</label>
-        <input type="text" id="wdAccount" placeholder="নম্বর লিখুন">
+        <label>নম্বর</label>
+        <input type="text" id="wdAccount" placeholder="নম্বর দিন">
       </div>
       <div class="input-group">
-        <label>পরিমাণ (BDT)</label>
+        <label>পরিমাণ</label>
         <input type="number" id="wdAmount" placeholder="সর্বনিম্ন ৫০০ টাকা">
       </div>
       <button class="btn-submit" onclick="submitWithdraw()">উইথড্র করুন</button>
-    </div>
-  </div>
-
-  <!-- CHANGE PASSWORD PAGE -->
-  <div id="changePassPage" class="page">
-    <div class="auth-card">
-      <h2>পাসওয়ার্ড পরিবর্তন করুন</h2>
-      <div class="input-group">
-        <label>পুরাতন পাসওয়ার্ড</label>
-        <input type="password" placeholder="Old Password">
-      </div>
-      <div class="input-group">
-        <label>নতুন পাসওয়ার্ড</label>
-        <input type="password" placeholder="New Password">
-      </div>
-      <button class="btn-submit" onclick="showToast('পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!', 'success')">আপডেট করুন</button>
-    </div>
-  </div>
-
-  <!-- HISTORY PAGE -->
-  <div id="historyPage" class="page">
-    <div class="auth-card">
-      <h2>লেনদেন হিস্ট্রি</h2>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>টাইপ</th>
-            <th>পরিমাণ</th>
-            <th>স্ট্যাটাস</th>
-          </tr>
-        </thead>
-        <tbody id="txHistoryBody">
-          <!-- Dynamic Tx Data -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SUPPORT PAGE -->
-  <div id="supportPage" class="page">
-    <div class="auth-card" style="text-align: center;">
-      <h2>কাস্টমার সাপোর্ট</h2>
-      <p style="margin: 15px 0; color: #94a3b8;">যে কোনো সমস্যায় আমাদের সাথে যোগাযোগ করুন:</p>
-      <button class="btn-submit" style="background:#0088cc; margin-bottom: 10px;" onclick="window.open('https://t.me', '_blank')">Telegram Support</button>
-      <button class="btn-submit" onclick="showToast('Live Chat শীঘ্রই আসছে!', 'info')">Live Chat</button>
     </div>
   </div>
 
@@ -356,8 +251,6 @@
   <div class="bottom-nav" id="bottomNav" style="display:none;">
     <div class="nav-item" onclick="showPage('homePage')">🏠 হোম</div>
     <div class="nav-item" onclick="showPage('gamePage')">🎮 গেম</div>
-    <div class="nav-item" onclick="showPage('activityPage')">🎁 অ্যাক্টিভিটি</div>
-    <div class="nav-item" onclick="showPage('promoPage')">👥 প্রমোশন</div>
     <div class="nav-item" onclick="showPage('profilePage')">👤 প্রোফাইল</div>
   </div>
 
