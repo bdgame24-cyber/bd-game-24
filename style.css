@@ -17,7 +17,6 @@ body {
   padding-bottom: 75px;
 }
 
-/* Header Design */
 .header {
   background: linear-gradient(135deg, #1e1b4b, #0f172a);
   padding: 15px 20px;
@@ -53,17 +52,10 @@ body {
   background: linear-gradient(90deg, #ef4444, #dc2626); 
 }
 
-/* Page Control */
-.page { 
-  display: none; 
-  padding: 15px; 
-}
-.page.active { 
-  display: block; 
-}
+.page { display: none; padding: 15px; }
+.page.active { display: block; }
 
-/* Authentication & Profile Cards */
-.auth-card, .wallet-card, .timer-card, .profile-card {
+.auth-card, .wallet-card, .timer-card {
   background: #1e293b;
   border: 1px solid #334155;
   padding: 20px;
@@ -79,10 +71,7 @@ body {
   font-weight: 600;
 }
 
-.input-group {
-  margin-bottom: 14px;
-}
-
+.input-group { margin-bottom: 14px; }
 .input-group label {
   font-size: 12px;
   color: #94a3b8;
@@ -99,10 +88,6 @@ body {
   border-radius: 10px;
   font-size: 14px;
   outline: none;
-}
-
-.input-group input:focus, .input-group select:focus {
-  border-color: #f59e0b;
 }
 
 .btn-submit {
@@ -124,14 +109,8 @@ body {
   margin-top: 15px;
   color: #94a3b8;
 }
+.auth-switch a { color: #38bdf8; text-decoration: none; }
 
-.auth-switch a {
-  color: #38bdf8;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-/* Home Banner & Cards */
 .banner {
   background: linear-gradient(135deg, #1e1b4b, #312e81);
   padding: 22px;
@@ -140,8 +119,7 @@ body {
   margin-bottom: 15px;
   border: 1px solid #3730a3;
 }
-
-.banner h2 { font-size: 18px; font-weight: 700; color: #f59e0b; letter-spacing: 0.5px; }
+.banner h2 { font-size: 18px; font-weight: 700; color: #f59e0b; }
 .banner p { font-size: 12px; color: #94a3b8; margin-top: 5px; }
 
 .winner-ticker {
@@ -152,9 +130,7 @@ body {
   border-radius: 8px;
   margin-bottom: 12px;
   color: #cbd5e1;
-  border-top: 1px solid #334155;
-  border-right: 1px solid #334155;
-  border-bottom: 1px solid #334155;
+  border: 1px solid #334155;
 }
 
 .notice-bar {
@@ -183,30 +159,36 @@ body {
 .game-card {
   background: #1e293b;
   border: 1px solid #334155;
-  padding: 18px 10px;
+  padding: 16px 8px;
   text-align: center;
   border-radius: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  position: relative;
+  transition: transform 0.2s;
 }
-
-.game-card:hover {
-  transform: translateY(-3px);
-  border-color: #f59e0b;
-}
-
-.game-icon { font-size: 28px; margin-bottom: 8px; }
+.game-card:hover { transform: translateY(-3px); border-color: #475569; }
+.game-icon { font-size: 30px; margin-bottom: 6px; }
 .game-card p { font-size: 12px; font-weight: 600; color: #f8fafc; }
 
-/* Game Dashboard */
+.sub-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: #10b981;
+  color: #fff;
+  margin-top: 5px;
+}
+.sub-badge.soon { background: #f59e0b; color: #0f172a; }
+
 .wallet-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(135deg, #1e1b4b, #0f172a);
 }
-
-.wallet-card h2 { color: #10b981; font-size: 24px; margin-top: 4px; font-weight: 700; }
+.wallet-card h2 { color: #10b981; font-size: 24px; font-weight: 700; }
 .wallet-card p { font-size: 12px; color: #94a3b8; }
 
 .btn-deposit {
@@ -217,7 +199,6 @@ body {
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 13px;
 }
 
 .timer-card {
@@ -225,7 +206,6 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-
 .game-name { font-weight: 600; font-size: 14px; color: #f8fafc; }
 .period-id { font-size: 12px; color: #94a3b8; margin-top: 4px; }
 
@@ -239,13 +219,7 @@ body {
   border: 1px solid #334155;
 }
 
-/* Prediction Action Buttons */
-.color-btns, .size-btns { 
-  display: flex; 
-  gap: 12px; 
-  margin-bottom: 12px; 
-}
-
+.color-btns, .size-btns { display: flex; gap: 12px; margin-bottom: 12px; }
 .btn-color, .btn-size {
   flex: 1;
   padding: 14px 0;
@@ -255,9 +229,7 @@ body {
   color: white;
   cursor: pointer;
   font-size: 14px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
-
 .btn-color.green { background: #10b981; }
 .btn-color.violet { background: #8b5cf6; }
 .btn-color.red { background: #ef4444; }
@@ -270,7 +242,6 @@ body {
   gap: 10px;
   margin-bottom: 14px;
 }
-
 .num-btn {
   padding: 14px 0;
   border-radius: 10px;
@@ -279,20 +250,12 @@ body {
   font-weight: bold;
   cursor: pointer;
   font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
-
 .num-btn.green { background: #10b981; }
 .num-btn.red { background: #ef4444; }
 .num-btn.red-violet { background: linear-gradient(135deg, #ef4444 50%, #8b5cf6 50%); }
 
-/* Tab System & Tables */
-.tab-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
+.tab-container { display: flex; gap: 10px; margin-bottom: 12px; }
 .tab-btn {
   flex: 1;
   padding: 10px;
@@ -302,14 +265,8 @@ body {
   border-radius: 10px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 500;
 }
-
-.tab-btn.active {
-  background: #334155;
-  color: #fff;
-  border-color: #475569;
-}
+.tab-btn.active { background: #334155; color: #fff; }
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -323,27 +280,18 @@ body {
   overflow: hidden;
   border: 1px solid #334155;
 }
-
 .data-table th, .data-table td {
   padding: 12px 10px;
   text-align: center;
   border-bottom: 1px solid #334155;
 }
+.data-table th { background: #0f172a; color: #94a3b8; }
 
-.data-table th {
-  background: #0f172a;
-  color: #94a3b8;
-  font-weight: 600;
-}
-
-/* Bottom Navigation */
 .bottom-nav {
   position: fixed;
-  bottom: 0;
-  left: 50%;
+  bottom: 0; left: 50%;
   transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
+  width: 100%; max-width: 480px;
   background: #0f172a;
   display: flex;
   justify-content: space-around;
@@ -351,108 +299,76 @@ body {
   border-top: 1px solid #1e293b;
   z-index: 1000;
 }
+.nav-item { text-align: center; font-size: 11px; color: #94a3b8; cursor: pointer; }
 
-.nav-item {
-  text-align: center;
-  font-size: 11px;
-  color: #94a3b8;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.nav-item:hover { color: #f59e0b; }
-
-/* Menu List */
-.menu-list {
-  background: #1e293b;
+/* Profile Styles */
+.profile-header-card {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border: 1px solid #3730a3;
+  padding: 20px;
   border-radius: 16px;
-  border: 1px solid #334155;
-  overflow: hidden;
-}
-
-.menu-item {
-  padding: 16px 20px;
-  border-bottom: 1px solid #334155;
-  font-size: 14px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #f8fafc;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.profile-avatar {
+  width: 55px; height: 55px;
+  background: #0f172a; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; border: 2px solid #f59e0b;
+}
+.profile-info h3 { font-size: 16px; color: #f8fafc; }
+.profile-info p { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+.vip-badge {
+  display: inline-block; background: #f59e0b; color: #0f172a;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 6px;
 }
 
+.profile-balance-box {
+  background: #1e293b; border: 1px solid #334155;
+  padding: 18px; border-radius: 16px;
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+}
+.profile-balance-box p { font-size: 12px; color: #94a3b8; }
+.profile-balance-box h2 { font-size: 22px; color: #10b981; font-weight: 700; }
+.profile-actions { display: flex; gap: 8px; }
+.profile-actions button { padding: 8px 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; color: white; }
+.profile-actions button:nth-child(1) { background: #10b981; }
+.profile-actions button:nth-child(2) { background: #ef4444; }
+
+.menu-list { background: #1e293b; border-radius: 16px; border: 1px solid #334155; overflow: hidden; }
+.menu-item {
+  padding: 14px 18px; border-bottom: 1px solid #334155; cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+}
 .menu-item:last-child { border-bottom: none; }
 .menu-item:hover { background: #334155; }
+.menu-icon {
+  font-size: 20px; background: #0f172a; padding: 8px; border-radius: 10px; border: 1px solid #334155;
+}
+.menu-item h4 { font-size: 14px; color: #f8fafc; }
+.menu-item p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
 
-/* Modal Design */
 .modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.75); justify-content: center; align-items: center; z-index: 2000;
 }
-
 .modal-content {
-  background: #1e293b;
-  padding: 22px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 360px;
-  border: 1px solid #334155;
+  background: #1e293b; padding: 22px; border-radius: 16px; width: 90%; max-width: 360px; border: 1px solid #334155;
 }
-
-.amount-options {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 10px;
-}
-
+.amount-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
 .amount-options button {
-  padding: 10px 0;
-  background: #0f172a;
-  border: 1px solid #334155;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
+  padding: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; cursor: pointer; font-size: 13px;
 }
 
-.amount-options button:hover {
-  border-color: #f59e0b;
-}
-
-/* Dots & Toasts */
-.dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
 .green-dot { background: #10b981; }
 .red-dot { background: #ef4444; }
 .violet-dot { background: #8b5cf6; }
 
-.toast-box {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
+.toast-box { position: fixed; top: 20px; right: 20px; z-index: 9999; }
 .toast-msg {
-  background: #10b981;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  background: #10b981; color: white; padding: 12px 18px; border-radius: 10px; margin-bottom: 8px; font-size: 13px; box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
-
 .toast-msg.error { background: #ef4444; }
